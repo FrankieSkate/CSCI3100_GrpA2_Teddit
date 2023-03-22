@@ -3,13 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser =require('body-parser');
-const user = require('./routes/user.js');
+const user = require('./routes/user_aacount.js');
 
 // set up environment
 const app = express();
-
-// mongo db connect
-mongoose.connect(process.env.TEDDITDB_URL);
 
 const PORT = process.env.PORT || 3000;
 
@@ -20,6 +17,15 @@ app.use(cors({
 }));
 
 app.use('/api/user', user);
+
+// mongo db connect
+mongoose.connect(process.env.TEDDITDB_URL)
+    .then(() => {
+         
+    })
+    .catch((error) => {
+        console.log(error)
+    });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
 
