@@ -1,17 +1,14 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const TweetSchema = new Schema({
+const CommentSchema = new Schema({
     _id: Schema.Types.ObjectId,
-    user_id:{
+    text: String,
+    commentFrom: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
-    },
-    tweet_tweet:{
-        type: String,
         required: true
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Tweet', TweetSchema);
+module.exports = mongoose.model('User_account', CommentSchema);
