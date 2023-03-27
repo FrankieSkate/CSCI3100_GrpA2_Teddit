@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const TweetCommentSchema = new Schema({
+    user_id: Number,
     tweet_id: {
         type: Schema.Types.ObjectId,
         ref: "Tweet",
