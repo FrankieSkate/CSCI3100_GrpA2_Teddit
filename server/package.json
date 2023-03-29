@@ -5,7 +5,11 @@
   "main": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js"
+    "start": "nodemon ./index.js",
+    "migrate": "knex migrate:latest",
+    "unmigrate": "knex migrate:rollback",
+    "unmigrate:all": "knex migrate:rollback --all",
+    "seed": "knex seed:run"
   },
   "keywords": [],
   "author": "",
