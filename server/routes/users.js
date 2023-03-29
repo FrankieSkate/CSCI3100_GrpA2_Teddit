@@ -15,4 +15,6 @@ router.get('/getFollower', userController.getFollower);
 
 router.get('/getFollowing', userController.getFollowing);
 
+router.post('/register', userController.register);
+
 module.exports = router;

@@ -62,6 +62,24 @@ class UserController {
             res.status(400).send(err);
         }
     }
+    
+    async register(req, res) {
+            try {
+                const { account, mail_address, password } = req.body;
+                const checking_ret = await userDAO.checkMailRegistered(mail_address);
+                if(Object.keys(mail_exist).length !== 0 ){
+                    if(checking_ret.account == account) {
+                        throw new Error("This mail address has been registered");
+                    } else {
+                        throw new Error("This account has been registered");
+                    }
+                }
+                const ret = await userDAO.register(account, mail_address, password);
+                res.status(201).json({message: ret});
+            } catch (err) {
+                res.status(400).send(err);
+            }
+        }
 }
 
 module.exports = new UserController();

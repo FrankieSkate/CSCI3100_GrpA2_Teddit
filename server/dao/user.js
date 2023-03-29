@@ -18,10 +18,9 @@ class UserDAO {
     async follow(user_id, following_id){
         const ret = await knex("user_relation")
             .insert({
-                // TODO: need check ok or not
                 user_id, following_id
             });
-        return ret;
+        return true;
     }
 
     async getFollower(user_id){
@@ -40,6 +39,21 @@ class UserDAO {
         return following_list;
     }
 
+    async checkMailOrAccountRegistered(account,mail_address){
+        const [ret] = await knex("user_account")
+            .select("mail_address", "account")
+            .where("mail_address", mail_address)
+            .orWhere("account", account);
+        return [ret];
+    }
+
+    async register(account, mail_address, password){
+        const user_id = await knex("user_account")
+            .insert({
+                account, mail_address, password
+            },['id']);
+        return user_id;
+    }
 
 }
 
