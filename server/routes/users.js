@@ -1,20 +1,28 @@
 const router = require('express').Router();
-const knex = require('../data/db');
 const userController = require('../controllers/user');
+const Auth = require('../middleware/auth')
 
 router.route('/test')
     .get((req, res) => {
         res.send('test');
     });
 
-router.post('/login',userController.userLogin);
+router.post('/login', Auth.verify, userController.userLogin);
 
-router.post('/follow', userController.follow);
+router.post('/follow', Auth.verify, userController.follow);
 
-router.get('/getFollower', userController.getFollower);
+router.get('/getFollower', Auth.verify, userController.getFollower);
 
-router.get('/getFollowing', userController.getFollowing);
+router.get('/getFollowing', Auth.verify, userController.getFollowing);
 
-router.post('/register', userController.register);
+router.post('/register', Auth.verify, userController.register);
+
+router.post('/updateInfo', Auth.verify, userController.updateUserInfo);
+
+router.get('/searchUser', Auth.verify, userController.searchUser);
+
+router.delete('/deleteUser/:id', Auth.verify, userController.deleteUser);
+
+// router.get('/viewAllUser', )
 
 module.exports = router;

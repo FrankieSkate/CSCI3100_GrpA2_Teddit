@@ -21,8 +21,8 @@ exports.seed = async function(knex) {
     {user_id: 1, following_id: 2}
   ]);
   await knex('tweet').insert([
-    {user_id: 1, tweet_text: "the first first first tweet"},
-    {user_id: 1, tweet_text: "2nd"},
-    {user_id: 3, tweet_text: "where is my group mate...\nI need help..."}
+    {user_id: 1, context: "the first first first tweet"},
+    {user_id: 1, context: "2nd"},
+    {user_id: 3, context: "where is my group mate...\nI need help..."}
   ]);
 };
