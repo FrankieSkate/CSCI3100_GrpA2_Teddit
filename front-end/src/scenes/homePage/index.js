@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import Navbar from "../navbar";
 import UserWidget from "../widgets/UserWidget";
+import UserPostWidget from "../widgets/UserPostWidget";
 const HomePage = () => {
   const user = { _id: "1a", picturePath: "adverts.jpeg" };
 
@@ -19,7 +20,9 @@ const HomePage = () => {
           <UserWidget userId={user._id} picturePath={user.picturePath} />
         </Box>
         {/* middle */}
-        <Box flexBasis="40%"></Box>
+        <Box flexBasis="40%">
+          <UserPostWidget picturePath={user.picturePath} />
+        </Box>
         {/* right */}
         <Box flexBasis="25%"></Box>
       </Box>
