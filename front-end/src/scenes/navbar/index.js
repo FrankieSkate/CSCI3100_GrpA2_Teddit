@@ -15,7 +15,7 @@ import { setLogout } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 
-const Navbar = () => {
+const Navbar = loginStatus => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //   const user = useSelector(state => state.user);
@@ -27,11 +27,9 @@ const Navbar = () => {
 
   //   const fullName = `${user.firstName} ${user.lastName}`;
   const fullName = "Jimmy Hung";
-  const [isLogin, setIsLogin] = useState("true");
-  const loginState = isLogin === "true";
-
+  const [isLogin, setIsLogin] = useState(loginStatus);
   const handleLogout = () => {
-    setIsLogin("false");
+    setIsLogin(!isLogin);
     dispatch(setLogout());
   };
 
@@ -56,7 +54,7 @@ const Navbar = () => {
         <FlexBetween
           backgroundColor={neutralLight}
           borderRadius="0.5rem"
-          gap="4rem"
+          gap={isLogin ? "4rem" : "20rem"}
           padding="0.1rem 1.5rem"
         >
           <InputBase placeholder="Search everything..." />
@@ -66,7 +64,7 @@ const Navbar = () => {
         </FlexBetween>
       </FlexBetween>
       {/* after login */}
-      {loginState && (
+      {isLogin && (
         <>
           <FlexBetween gap="2rem">
             <Message sx={{ fontSize: "24px" }} />
