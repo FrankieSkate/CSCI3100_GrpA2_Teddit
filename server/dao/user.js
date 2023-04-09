@@ -11,6 +11,27 @@ class UserDAO {
         return user;
     }
 
+    async getUserInfo(user_id){
+        const user_info = await knex("user_info")
+            .leftJoin("tweet", "user_info.user_id", "tweet.user_id")
+            .where("user_info.user_id", user_id);
+        return user_info
+    }
+
+    async countFollower(user_id){
+        const follower_count = await knex("user_relation")
+            .where("following_id", user_id)
+            .count("user_id as follower")
+        return follower_count;
+    }
+
+    async countFollowing(user_id){
+        const following_count = await knex("user_relation")
+            .where("user_id", user_id)
+            .count("following_id as following")
+        return following_count;
+    }
+
     async follow(user_id, following_id){
         const ret = await knex("user_relation")
             .insert({

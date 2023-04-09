@@ -8,7 +8,7 @@ class UserController {
     //         const ret = await userDAO;
     //         res.status(201).json(ret);
     //     } catch (err) {
-    //         res.status(400).send(err);
+    //         return res.status(400).send(err);
     //     }
     // }
 
@@ -17,19 +17,25 @@ class UserController {
             const { useraccount, password } = req.body;
             const [user] = await userDAO.userLogin(useraccount);
             if(!user){
-                res.status(400).send('invalid login')
+                return res.status(400).send('invalid login')
             }
-            else if(lenuser.password !== password){
-                res.status(400).send('invalid login')
+            else if(user.password !== password){
+                return res.status(400).send('invalid login')
             } else {
                 // not only return the id, but return all needed info
-                res.status(200).json(id);
+                const [user_info] = await userDAO.getUserInfo(user.id);
+                const [follower] = await userDAO.countFollower(user.id);
+                const [following] = await userDAO.countFollowing(user.id);
+                user_info["follower"] = follower.follower;
+                user_info["following"] = following.following;
+                res.status(200).json(user_info);
             }
         } catch (err) {
             res.status(400).send('error');
         }
     }
 
+    
     // return true or error
     async follow(req, res) {
         try {
@@ -38,7 +44,7 @@ class UserController {
             console.log('test from user controller', ret);
             res.status(201).json({message: "success"});
         } catch (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
     }
 
@@ -55,7 +61,7 @@ class UserController {
             console.log('test from user controller get follower', follower_list, typeof(follower_list));
             res.status(200).json(follower_list);
         } catch (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
     }
 
@@ -70,7 +76,7 @@ class UserController {
             const following_list = await userDAO.getFollowing(id);
             res.status(200).json(following_list);
         } catch (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
     }
 
@@ -89,7 +95,7 @@ class UserController {
                 const ret = await userDAO.register(account, mail_address, password);
                 res.status(201).json({message: ret});
             } catch (err) {
-                res.status(400).send(err);
+                return res.status(400).send(err);
             }
         }
     
@@ -100,7 +106,7 @@ class UserController {
             const ret = await userDAO.updateUserInfo(user_name, bio, avatar_source_url, cover_source_url);
             res.status(201).json(ret);
         } catch (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
     }
     
@@ -110,17 +116,21 @@ class UserController {
             const ret = await userDAO.searchUser(search_field);
             res.status(200).json(ret);
         } catch (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
     }
 
     async deleteUser(req, res) {
         try {
             const { id } = req.params;
-            const ret = await userDAO.deleteUser(id);
+            const user_id = Number(id);
+            if(isNaN(user_id)){
+                throw new Error('Fail to get data');
+            }
+            const ret = await userDAO.deleteUser(user_id);
             res.status(201).json(ret);
         } catch (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
     }
 
@@ -131,7 +141,7 @@ class UserController {
             const user_info = await userDAO.viewAllUserInfo(search_field);
             res.status(200).json(user_info);
         } catch (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
     }
 }

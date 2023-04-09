@@ -7,7 +7,7 @@ router.route('/test')
         res.send('test');
     });
 
-router.post('/login', Auth.verify, userController.userLogin);
+router.post('/login', userController.userLogin);
 
 router.post('/follow', Auth.verify, userController.follow);
 

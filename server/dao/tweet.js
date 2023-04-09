@@ -19,7 +19,7 @@ class TweetDAO {
             .where("id", tweet_id)
             .update({
                 "context": context,
-                "picture_path": image_path
+                // "picture_path": image_path
             })
         return edit_tweet;
     }
@@ -31,6 +31,22 @@ class TweetDAO {
         return ret;
     }
 
+    async getTweet() {
+        const tweet_list = await knex("tweet")
+            .join("user_info", "user_info.user_id", "=", "tweet.user_id")
+            .leftJoin(
+                knex("tweet_like")
+                    .groupBy("tweet_id")
+                    .groupBy("like")
+                    .count("user_id as count" ),
+                "tweet_like.tweet_id",
+                "tweet.tweet_id"
+            )
+            .orderBy("createdAt", "desc")
+            .select("tweet.*", "user_info.name", "user_info.avatar_source_url", "tweet_like.like", "tweet_like.count")
+        return tweet_list;
+    }
+
     async getFollowingUserTweet(user_id) {
         const tweet_list = await knex("user_relation")
             .where("user_id", user_id)
@@ -38,12 +54,14 @@ class TweetDAO {
             .join("user_info", "user_info.user_id", "=", "tweet.user_id")
             .leftJoin(
                 knex("tweet_like")
-                    .where("user_id", user_id)
-                    .select("*"),
+                    .groupBy("tweet_id")
+                    .groupBy("like")
+                    .count("user_id as count" ),
                 "tweet_like.tweet_id",
                 "tweet.tweet_id"
             )
-            .select("tweet.*", "user_info.name", "user_info.avatar_source_url", "tweet_like.user_id")
+            .orderBy("createdAt", "desc")
+            .select("tweet.*", "user_info.name", "user_info.avatar_source_url", "tweet_like.like", "tweet_like.count")
         return tweet_list;
     }
 
