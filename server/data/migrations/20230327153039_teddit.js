@@ -9,38 +9,41 @@ exports.up = function(knex) {
       table.string('account').notNullable().unique();
       table.string('password').notNullable();
       table.string('mail_address').notNullable().unique();
-      table.timestamp('create_at').defaultTo(knex.fn.now());
-      table.timestamp('updated_at').defaultTo(knex.fn.now());
+      table.integer('admin').notNullable().defaultTo(0);
+      table.timestamps(true, true);
     })
     .createTable('user_info', function(table){
       table.integer('user_id').unsigned().primary().references('id').inTable('user_account').onUpdate('CASCADE').onDelete('CASCADE');
       table.string('name').notNullable();
+      table.text('bio');
+      table.text('avatar_source_path');
+      table.text('cover_source_path');
     })
     .createTable('tweet', function(table){
       table.increments('id').primary();
       table.integer('user_id').unsigned().index().references('id').inTable('user_account');
-      table.string('tweet_text').notNullable();
-      table.timestamp('create_at').defaultTo(knex.fn.now());
-      table.timestamp('updated_at').defaultTo(knex.fn.now());
+      table.text('context').notNullable();
+      table.text('picture_path');
+      table.integer('retweet_id').references('id').inTable('tweet');
+      table.timestamps(true, true);
     })
     .createTable('user_relation', function(table){
       table.increments().primary();
       table.integer('user_id').unsigned().index().references('id').inTable('user_account').onUpdate('CASCADE').onDelete('CASCADE');
       table.integer('following_id').unsigned().index().references('id').inTable('user_account').onUpdate('CASCADE').onDelete('CASCADE');
-      table.timestamp('create_at').defaultTo(knex.fn.now());
-      table.timestamp('updated_at').defaultTo(knex.fn.now());
+      table.timestamps(true, true);
     })
     .createTable('tweet_comment', function(table){
       table.increments().primary();
       table.integer('user_id').unsigned().index().references('id').inTable('user_account').onUpdate('CASCADE').onDelete('CASCADE');;
       table.integer('tweet_id').unsigned().index().references('id').inTable('tweet').onUpdate('CASCADE').onDelete('CASCADE');;
-      table.string('tweet_comment').notNullable();
-      table.timestamp('create_at').defaultTo(knex.fn.now());
-      table.timestamp('updated_at').defaultTo(knex.fn.now());
+      table.text('tweet_comment').notNullable();
+      table.timestamps(true, true);
     })
     .createTable('tweet_like', function(table){
       table.increments().primary();
-      table.integer('like_user_id').unsigned().index().references('id').inTable('user_account').onUpdate('CASCADE').onDelete('CASCADE');;
+      table.integer('like').notNullable();
+      table.integer('user_id').unsigned().index().references('id').inTable('user_account').onUpdate('CASCADE').onDelete('CASCADE');;
       table.integer('tweet_id').unsigned().index().references('id').inTable('tweet').onUpdate('CASCADE').onDelete('CASCADE');
     })
   };
