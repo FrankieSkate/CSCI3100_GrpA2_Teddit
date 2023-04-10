@@ -3,7 +3,8 @@ const express = require('express');
 const cors = require('cors');
 // const mongoose = require('mongoose');
 const bodyParser =require('body-parser');
-const user = require('./routes/users.js');
+const user = require('./routes/users');
+const tweet = require('./routes/tweet')
 
 // set up environment
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors({
 }));
 
 app.use('/api/user', user);
+app.use('/api/tweet', tweet);
 
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
