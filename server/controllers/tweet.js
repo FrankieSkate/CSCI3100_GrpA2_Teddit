@@ -49,12 +49,12 @@ class TweetController {
     async getTweet(req, res) {
         try {
             const { user_id } = req.query;
-            
+            let ret;
             if(user_id && Number(user_id)) {
                 const id = Number(user_id);
-                const ret = await TweetDAO.getFollowingUserTweet(id);
+                ret = await TweetDAO.getFollowingUserTweet(id);
             } else {
-                const ret = await TweetDAO.getTweet();
+                ret = await TweetDAO.getTweet();
             }
             res.status(201).json(ret);
         } catch (err) {
@@ -77,7 +77,7 @@ class TweetController {
 
     async getComment(req, res) {
         try {
-            const { tweet_id } = req.body;
+            const { tweet_id } = req.query;
             const id = Number(tweet_id);
             if(isNaN(id)){
                 throw new Error('Fail to get tweet id.');
