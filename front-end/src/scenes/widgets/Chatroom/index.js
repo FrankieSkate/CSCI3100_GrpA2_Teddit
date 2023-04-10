@@ -1,12 +1,17 @@
-import { Box, Divider, InputBase, useTheme, Typography, IconButton } from "@mui/material";
-import FlexBetween from "../../../components/FlexBetween";
+import {
+  Box,
+  Divider,
+  InputBase,
+  useTheme,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import WidgetWrapper from "../../../components/WidgetWrapper";
 import UserImage from "../../../components/UserImage";
 import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import Dropzone from "react-dropzone";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Grid } from "@mui/material";
 
 const Chatroom = ({ picturePath, isOnline }) => {
@@ -15,7 +20,7 @@ const Chatroom = ({ picturePath, isOnline }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const { palette } = useTheme();
 
-  const handleMessageSubmit = (e) => {
+  const handleMessageSubmit = e => {
     e.preventDefault();
     if (message.trim() !== "") {
       const now = new Date();
@@ -24,9 +29,13 @@ const Chatroom = ({ picturePath, isOnline }) => {
         {
           text: message,
           sentByCurrentUser: true,
-          timestamp: now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }),
+          timestamp: now.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          }),
           photo: selectedFile ? selectedFile.name : null, // add photo property to message object
-        }
+        },
       ]);
       setMessage("");
       setSelectedFile(null); // clear selected file after submitting message
@@ -53,9 +62,11 @@ const Chatroom = ({ picturePath, isOnline }) => {
         <Box sx={{ marginRight: "1rem" }}>
           <UserImage image={picturePath} />
         </Box>
-        <Typography variant="h6">{user.firstName + " " + user.lastName}</Typography>
+        <Typography variant="h6">
+          {user.firstName + " " + user.lastName}
+        </Typography>
       </Box>
-      
+
       <Box
         sx={{
           height: "30rem",
@@ -85,7 +96,10 @@ const Chatroom = ({ picturePath, isOnline }) => {
               }}
             >
               <Typography variant="subtitle2">{message.text}</Typography>
-              {message.photo && <Typography variant="caption">{message.photo}</Typography>} {/* add photo to message display */}
+              {message.photo && (
+                <Typography variant="caption">{message.photo}</Typography>
+              )}{" "}
+              {/* add photo to message display */}
               <Typography variant="caption">{message.timestamp}</Typography>
             </Box>
           </Box>
@@ -98,66 +112,69 @@ const Chatroom = ({ picturePath, isOnline }) => {
           alignItems: "center",
         }}
       >
-  <form onSubmit={handleMessageSubmit} sx={{ flexGrow: 1 }}>
-    <Grid container spacing={1} alignItems="flex-end">
-      <Grid item xs={10}>
-      <InputBase
-  placeholder="Type a message..."
-  onChange={(e) => setMessage(e.target.value)}
-  onKeyPress={(e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (message.trim() !== "") {
-        const now = new Date();
-        setMessages([
-          ...messages,
-          {
-            text: selectedFile ? selectedFile.name : message,
-            sentByCurrentUser: true,
-            timestamp: now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }),
-            photo: selectedFile ? URL.createObjectURL(selectedFile) : null,
-          }
-        ]);
-        setMessage("");
-        setSelectedFile(null);
-      }
-    }
-  }}
-  value={message}
-  sx={{
-    backgroundColor: palette.neutral.light,
-    borderRadius: "1rem",
-    padding: "0.5rem 10rem",
-    flexGrow: 1,
-  }}
-/>
-      </Grid>
-      <Grid item xs={1}>
-      <Dropzone onDrop={(acceptedFiles) => setSelectedFile(acceptedFiles[0])}>
-  {({ getRootProps, getInputProps }) => (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} />
-      <IconButton>
-        <PhotoCameraIcon />
-      </IconButton>
-    </div>
-  )}
-</Dropzone>
-      </Grid>
-      <Grid item xs={1}>
-        <IconButton type="submit">
-          <SendIcon />
-        </IconButton>
-      </Grid>
-    </Grid>
-  </form>
-</Box>
-
-
-
-      
+        <form onSubmit={handleMessageSubmit} sx={{ flexGrow: 1 }}>
+          <Grid container spacing={1} alignItems="flex-end">
+            <Grid item xs={10}>
+              <InputBase
+                placeholder="Type a message..."
+                onChange={e => setMessage(e.target.value)}
+                onKeyPress={e => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (message.trim() !== "") {
+                      const now = new Date();
+                      setMessages([
+                        ...messages,
+                        {
+                          text: selectedFile ? selectedFile.name : message,
+                          sentByCurrentUser: true,
+                          timestamp: now.toLocaleTimeString([], {
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true,
+                          }),
+                          photo: selectedFile
+                            ? URL.createObjectURL(selectedFile)
+                            : null,
+                        },
+                      ]);
+                      setMessage("");
+                      setSelectedFile(null);
+                    }
+                  }
+                }}
+                value={message}
+                sx={{
+                  backgroundColor: palette.neutral.light,
+                  borderRadius: "1rem",
+                  padding: "0.5rem 10rem",
+                  flexGrow: 1,
+                }}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Dropzone
+                onDrop={acceptedFiles => setSelectedFile(acceptedFiles[0])}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <IconButton>
+                      <PhotoCameraIcon />
+                    </IconButton>
+                  </div>
+                )}
+              </Dropzone>
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton type="submit">
+                <SendIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
     </WidgetWrapper>
-    
   );
 };
 
