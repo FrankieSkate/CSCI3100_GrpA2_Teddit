@@ -1,4 +1,5 @@
 const userDAO = require("../dao/user");
+const tweetDAO = require("../dao/tweet");
 
 class UserController {
 
@@ -14,8 +15,8 @@ class UserController {
 
     async userLogin(req, res) {
         try {
-            const { useraccount, password } = req.body;
-            const [user] = await userDAO.userLogin(useraccount);
+            const { account, password } = req.body;
+            const [user] = await userDAO.userLogin(account);
             if(!user){
                 return res.status(400).send('invalid login')
             }
@@ -40,8 +41,17 @@ class UserController {
     async follow(req, res) {
         try {
             const { user_id, following_id } = req.body;
-            const ret = await userDAO.follow(user_id, following_id);
-            console.log('test from user controller', ret);
+            const [ret] = await userDAO.follow(user_id, following_id);
+            res.status(201).json([ret]);
+        } catch (err) {
+            return res.status(400).send(err);
+        }
+    }
+
+    async unfollow(req, res) {
+        try {
+            const { user_id, following_id } = req.body;
+            const ret = await userDAO.unfollow(user_id, following_id);
             res.status(201).json({message: "success"});
         } catch (err) {
             return res.status(400).send(err);
