@@ -71,7 +71,7 @@ const Navbar = (loginStatus, ChatroomStatus) => {
       {isLogin && (
         <>
           <FlexBetween gap="2rem">
-            <IconButton onClick={handleChatroomClick}>
+            <IconButton onClick={() => navigate("/chatroom")}>
               <Message sx={{ fontSize: "24px" }} />
             </IconButton>
             <Notifications sx={{ fontSize: "24px" }} />
