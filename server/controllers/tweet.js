@@ -75,6 +75,19 @@ class TweetController {
         }
     }
 
+    async like(req, res) {
+        try {
+            const { user_id, tweet_id, like } = req.body;
+            if (!(user_id&&tweet_id&like)){
+                return res.status(400).send("Lack of information.");
+            }
+            const ret = await TweetDAO.like(user_id, tweet_id, like);
+            res.status(201).json(ret);
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    }
+
     async getComment(req, res) {
         try {
             const { tweet_id } = req.query;
