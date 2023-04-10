@@ -117,7 +117,7 @@ const Form = () => {
 
 
             <TextField
-              label="Email"
+              label="Registered Email"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.email}
@@ -175,7 +175,7 @@ const Form = () => {
                 },
               }}
             >
-              {"Forgot password?"}
+              {"Forgot password? Click here for help."}
             </Typography>    
 
             <Typography
@@ -189,7 +189,7 @@ const Form = () => {
                 },
               }}
             >
-              {"Reset password"}
+              {"Reset password? Click here for help."}
             </Typography>   
 
 
