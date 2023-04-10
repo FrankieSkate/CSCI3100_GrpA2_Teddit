@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom"; 
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state";
 import Dropzone from "react-dropzone";
@@ -235,6 +235,36 @@ const Form = () => {
                 ? "Don't have an account? Sign Up here."
                 : "Already have an account? Login here."}
             </Typography>
+            
+            <Typography
+              onClick={() => navigate("/forget")}
+              sx={{
+                textDecoration: "underline",
+                color: palette.primary.main,
+                "&:hover": {
+                  cursor: "pointer",
+                  color: palette.primary.dark,
+                },
+              }}
+            >
+              {"Forgot password?"}
+            </Typography>    
+
+            <Typography
+              onClick={() => navigate("/reset")}
+              sx={{
+                textDecoration: "underline",
+                color: palette.primary.main,
+                "&:hover": {
+                  cursor: "pointer",
+                  color: palette.primary.dark,
+                },
+              }}
+            >
+              {"Reset password"}
+            </Typography>   
+
+
           </Box>
         </form>
       )}
