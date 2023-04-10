@@ -18,7 +18,7 @@ class TweetController {
             if (!user_id || !context){
                 return res.status(400).send('invalid post')
             }
-            const ret = await TweetDAO;
+            const ret = await TweetDAO.post( user_id, context, image_path, retweet_id );
             res.status(201).json(ret);
         } catch (err) {
             res.status(400).send(err);

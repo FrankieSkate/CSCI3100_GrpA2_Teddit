@@ -3,13 +3,16 @@ const knex = require("../data/db")
 class TweetDAO {
 
     async post(user_id, context, image_path, retweet_id) {
+        const insert_data  = {
+            "user_id": user_id,
+            "context": context,
+            "picture_path": image_path,
+        };
+        if(retweet_id){
+            insert_data["retweet_id"] = retweet_id;
+        }
         const new_tweet = await knex("tweet")
-            .insert({
-                "user_id": user_id,
-                "context": context,
-                "picture_path": image_path,
-                "retweet_id": retweet_id
-            })
+            .insert(insert_data)
             .returning("*");
         return new_tweet;
     }
