@@ -247,7 +247,7 @@ const Form = () => {
                 },
               }}
             >
-              {"Forgot password?"}
+              {"Forgot password? Click here for help."}
             </Typography>    
 
             <Typography
@@ -261,7 +261,7 @@ const Form = () => {
                 },
               }}
             >
-              {"Reset password"}
+              {"Reset password? Click here for help."}
             </Typography>   
 
 
