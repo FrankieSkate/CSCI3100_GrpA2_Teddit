@@ -3,13 +3,16 @@ const knex = require("../data/db")
 class TweetDAO {
 
     async post(user_id, context, image_path, retweet_id) {
+        const insert_data  = {
+            "user_id": user_id,
+            "context": context,
+            "picture_path": image_path,
+        };
+        if(retweet_id){
+            insert_data["retweet_id"] = retweet_id;
+        }
         const new_tweet = await knex("tweet")
-            .insert({
-                "user_id": user_id,
-                "context": context,
-                "picture_path": image_path,
-                "retweet_id": retweet_id
-            })
+            .insert(insert_data)
             .returning("*");
         return new_tweet;
     }
@@ -20,7 +23,7 @@ class TweetDAO {
             .update({
                 "context": context,
                 // "picture_path": image_path
-            })
+            });
         return edit_tweet;
     }
 
@@ -36,14 +39,15 @@ class TweetDAO {
             .join("user_info", "user_info.user_id", "=", "tweet.user_id")
             .leftJoin(
                 knex("tweet_like")
-                    .groupBy("tweet_id")
-                    .groupBy("like")
-                    .count("user_id as count" ),
-                "tweet_like.tweet_id",
-                "tweet.tweet_id"
+                    .select("tweet_like.tweet_id", "tweet_like.like", knex.raw("COUNT(tweet_like.like) as counting "))
+                    .groupBy("tweet_like.tweet_id")
+                    .groupByRaw("tweet_like.like")
+                    .as("like_count"),
+                "like_count.tweet_id",
+                "tweet.id"
             )
-            .orderBy("createdAt", "desc")
-            .select("tweet.*", "user_info.name", "user_info.avatar_source_url", "tweet_like.like", "tweet_like.count")
+            .orderBy("tweet.created_at", "desc")
+            .select("tweet.*", "user_info.name", "user_info.avatar_source_path", "like_count.like", "like_count.counting");
         return tweet_list;
     }
 
@@ -54,14 +58,15 @@ class TweetDAO {
             .join("user_info", "user_info.user_id", "=", "tweet.user_id")
             .leftJoin(
                 knex("tweet_like")
-                    .groupBy("tweet_id")
-                    .groupBy("like")
-                    .count("user_id as count" ),
-                "tweet_like.tweet_id",
-                "tweet.tweet_id"
+                .select("tweet_like.tweet_id", "tweet_like.like", knex.raw("COUNT(tweet_like.like) as counting "))
+                .groupBy("tweet_like.tweet_id")
+                .groupByRaw("tweet_like.like")
+                .as("like_count"),
+                "like_count.tweet_id",
+                "tweet.id"
             )
-            .orderBy("createdAt", "desc")
-            .select("tweet.*", "user_info.name", "user_info.avatar_source_url", "tweet_like.like", "tweet_like.count")
+            .orderBy("tweet.created_at", "desc")
+            .select("tweet.*", "user_info.name", "user_info.avatar_source_path", "tweet_like.like", "tweet_like.counting");
         return tweet_list;
     }
 
@@ -82,7 +87,7 @@ class TweetDAO {
                 "tweet_like.tweet_id",
                 "tweet.tweet_id"
             )
-            .select("tweet.*", "user_info.name", "user_info.avatar_source_url")
+            .select("tweet.*", "user_info.name", "user_info.avatar_source_path")
         return tweet;
     }
 
@@ -98,7 +103,7 @@ class TweetDAO {
     }
 
     async getComment(tweet_id) {
-        const comment_list = await knew("tweet_comment")
+        const comment_list = await knex("tweet_comment")
             .where("tweet_id", tweet_id)
             .select("*")
         return comment_list;

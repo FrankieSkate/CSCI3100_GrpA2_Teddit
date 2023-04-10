@@ -18,7 +18,7 @@ class TweetController {
             if (!user_id || !context){
                 return res.status(400).send('invalid post')
             }
-            const ret = await TweetDAO;
+            const ret = await TweetDAO.post( user_id, context, image_path, retweet_id );
             res.status(201).json(ret);
         } catch (err) {
             res.status(400).send(err);
@@ -49,12 +49,12 @@ class TweetController {
     async getTweet(req, res) {
         try {
             const { user_id } = req.query;
-            
+            let ret;
             if(user_id && Number(user_id)) {
                 const id = Number(user_id);
-                const ret = await TweetDAO.getFollowingUserTweet(id);
+                ret = await TweetDAO.getFollowingUserTweet(id);
             } else {
-                const ret = await TweetDAO.getTweet();
+                ret = await TweetDAO.getTweet();
             }
             res.status(201).json(ret);
         } catch (err) {
@@ -77,7 +77,7 @@ class TweetController {
 
     async getComment(req, res) {
         try {
-            const { tweet_id } = req.body;
+            const { tweet_id } = req.query;
             const id = Number(tweet_id);
             if(isNaN(id)){
                 throw new Error('Fail to get tweet id.');

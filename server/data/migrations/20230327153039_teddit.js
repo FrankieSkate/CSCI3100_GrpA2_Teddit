@@ -24,7 +24,7 @@ exports.up = function(knex) {
       table.integer('user_id').unsigned().index().references('id').inTable('user_account');
       table.text('context').notNullable();
       table.text('picture_path');
-      table.text('retweet_id').references('id').inTable('user');
+      table.integer('retweet_id').references('id').inTable('tweet');
       table.timestamps(true, true);
     })
     .createTable('user_relation', function(table){
