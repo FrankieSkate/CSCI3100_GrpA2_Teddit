@@ -15,7 +15,7 @@ import { setLogout } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 
-const Navbar = loginStatus => {
+const Navbar = (loginStatus, ChatroomStatus) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //   const user = useSelector(state => state.user);
@@ -28,11 +28,15 @@ const Navbar = loginStatus => {
   //   const fullName = `${user.firstName} ${user.lastName}`;
   const fullName = "Jimmy Hung";
   const [isLogin, setIsLogin] = useState(loginStatus);
+  const [isChatroom, setIsChatroom] = useState(ChatroomStatus);
   const handleLogout = () => {
     setIsLogin(!isLogin);
     dispatch(setLogout());
   };
 
+  const handleChatroomClick = () => {
+    setIsChatroom(!ChatroomStatus);
+  };
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
       {/* default */}
@@ -67,7 +71,9 @@ const Navbar = loginStatus => {
       {isLogin && (
         <>
           <FlexBetween gap="2rem">
-            <Message sx={{ fontSize: "24px" }} />
+            <IconButton onClick={handleChatroomClick}>
+              <Message sx={{ fontSize: "24px" }} />
+            </IconButton>
             <Notifications sx={{ fontSize: "24px" }} />
             <FormControl variant="standard" value={fullName}>
               <Select

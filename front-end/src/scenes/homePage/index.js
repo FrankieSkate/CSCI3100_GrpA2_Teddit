@@ -5,14 +5,17 @@ import UserWidget from "../widgets/UserWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import AdvertWidget from "../widgets/AdvertWidget";
 import FriendListWidget from "../widgets/FriendListWidget";
+import Chatroom from "../widgets/Chatroom";
 import { useState } from "react";
 const HomePage = () => {
   const user = { _id: "1a", picturePath: "adverts.jpeg" };
   const [loginStatus, setLoginStatus] = useState("true");
+  const [ChatroomStatus, setIsChatroom] = useState("true");
   const isLogin = loginStatus === "true";
+  const isChatroom = ChatroomStatus === "false";
   return (
     <Box>
-      <Navbar loginStatus={loginStatus} />
+      <Navbar loginStatus={loginStatus} chatrooom = {ChatroomStatus} />
       {isLogin ? (
         <Box
           width="100%"
@@ -28,8 +31,12 @@ const HomePage = () => {
 
           {/* middle */}
           <Box flexBasis="45%">
-            <UserPostWidget picturePath={user.picturePath} />
+          {isChatroom ? (<Chatroom picturePath={user.picturePath} />) : (
+            <>
+            <UserPostWidget picturePath={user.picturePath} isOnline={true}/>
             <PostsWidget />
+            </>
+          )}
           </Box>
           {/* right */}
           <Box flexBasis="25%">
