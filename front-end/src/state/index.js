@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   posts: [],
+  admin: false,
 };
 
 export const authSlice = createSlice({
@@ -35,6 +36,9 @@ export const authSlice = createSlice({
         return post;
       });
       state.posts = updatedPosts;
+    },
+    setAdmin: (state , action) => {
+      state.admin = action.payload.admin;
     },
   },
 });

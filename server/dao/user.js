@@ -2,18 +2,18 @@ const knex = require("../data/db")
 
 class UserDAO {
 
-    // TODO able gmail or useraccount
-    async userLogin(useraccount){
+    // TODO able gmail or account
+    async userLogin(account){
         const user = await knex("user_account")
             .select("id", "password")
             // TODO: need to check with this or condition work or not
-            .where("account", useraccount)
+            .where("account", account)
         return user;
     }
 
     async getUserInfo(user_id){
         const user_info = await knex("user_info")
-            .leftJoin("tweet", "user_info.user_id", "tweet.user_id")
+            .select("*")
             .where("user_info.user_id", user_id);
         return user_info
     }
@@ -36,7 +36,16 @@ class UserDAO {
         const ret = await knex("user_relation")
             .insert({
                 user_id, following_id
-            });
+            })
+            .returning("*");
+        return ret;
+    }
+
+    async unfollow(user_id, following_id){
+        const ret = await knex("user_relation")
+            .where("user_id", user_id)
+            .andWhere("following_id", following_id)
+            .del();
         return ret;
     }
 
@@ -44,6 +53,7 @@ class UserDAO {
         const follower_list = await knex("user_info")
             .join("user_relation", "user_info.user_id", "=", "user_relation.user_id")
             .where("user_relation.following_id", user_id)
+            .groupBy("user_info.user_id")
             .select("user_info.*");
         return follower_list;
     }
@@ -52,6 +62,7 @@ class UserDAO {
         const following_list = await knex("user_info")
             .join("user_relation", "user_info.user_id", "=", "user_relation.following_id")
             .where("user_relation.user_id", user_id)
+            .groupBy("user_info.user_id")
             .select("user_info.*");
         return following_list;
     }
@@ -67,7 +78,9 @@ class UserDAO {
     async register(account, mail_address, password){
         const user_id = await knex("user_account")
             .insert({
-                account, mail_address, password
+                "account":account,
+                "mail_address": mail_address,
+                "password": password
             },['id']);
         return user_id;
     }

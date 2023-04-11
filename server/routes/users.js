@@ -11,6 +11,8 @@ router.post('/login', userController.userLogin);
 
 router.post('/follow', Auth.verify, userController.follow);
 
+router.post('/unfollow', Auth.verify, userController.unfollow);
+
 router.get('/getFollower', Auth.verify, userController.getFollower);
 
 router.get('/getFollowing', Auth.verify, userController.getFollowing);

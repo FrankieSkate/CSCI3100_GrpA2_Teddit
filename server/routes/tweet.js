@@ -12,6 +12,9 @@ router.get('/gettweet', TweetController.getTweet);
 
 router.post('/comment', Auth.verify, TweetController.comment);
 
+router.post('/like', Auth.verify, TweetController.like);
+
 router.get('/getcomment', TweetController.getComment);
+
 
 module.exports = router;

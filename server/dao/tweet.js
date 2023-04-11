@@ -102,6 +102,16 @@ class TweetDAO {
         return new_comment;
     }
 
+    async like(user_id, tweet_id, like) {
+        const new_like = await knex("tweet_like")
+            .insert({
+                "user_id": user_id,
+                "tweet_id": tweet_id,
+                "like": like
+            });
+        return new_like;
+    }
+
     async getComment(tweet_id) {
         const comment_list = await knex("tweet_comment")
             .where("tweet_id", tweet_id)
