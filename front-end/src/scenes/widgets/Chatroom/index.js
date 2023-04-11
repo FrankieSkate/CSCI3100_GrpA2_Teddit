@@ -10,8 +10,28 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Grid } from "@mui/material";
 
 const Chatroom = ({ picturePath, isOnline }) => {
-  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      text: "Hey, what's up?",
+      sentByCurrentUser: false,
+      timestamp: "10:30 AM",
+      photo: null,
+    },
+    {
+      text: "Not much, just chilling. You?",
+      sentByCurrentUser: true,
+      timestamp: "10:31 AM",
+      photo: null,
+    },
+    {
+      text: "Same here. Have you seen the latest movie?",
+      sentByCurrentUser: false,
+      timestamp: "10:32 AM",
+      photo: null,
+    },
+  ]);
+  
   const [selectedFile, setSelectedFile] = useState(null);
   const { palette } = useTheme();
 
@@ -39,6 +59,7 @@ const Chatroom = ({ picturePath, isOnline }) => {
     viewedProfile: "frankie",
     friends: "frankie",
   };
+
 
   return (
     <WidgetWrapper>
@@ -102,7 +123,7 @@ const Chatroom = ({ picturePath, isOnline }) => {
     <Grid container spacing={1} alignItems="flex-end">
       <Grid item xs={10}>
       <InputBase
-  placeholder="Type a message..."
+  placeholder="Type here ..."
   onChange={(e) => setMessage(e.target.value)}
   onKeyPress={(e) => {
     if (e.key === 'Enter') {

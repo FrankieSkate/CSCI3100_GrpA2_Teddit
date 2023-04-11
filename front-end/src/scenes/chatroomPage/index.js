@@ -5,6 +5,7 @@ import UserWidget from "../widgets/UserWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import AdvertWidget from "../widgets/AdvertWidget";
 import FriendListWidget from "../widgets/FriendListWidget";
+import FriendListChat from "../widgets/FriendListChat";
 import Chatroom from "../widgets/Chatroom";
 import { useState } from "react";
 const ChatroomPage = () => {
@@ -24,9 +25,7 @@ const ChatroomPage = () => {
         >
           {/* left */}
           <Box flexBasis="26%">
-            <UserWidget userId={user._id} picturePath={user.picturePath} />
-            <Box m="2rem 0" />
-            <FriendListWidget />
+            <FriendListChat />
           </Box>
           
 
