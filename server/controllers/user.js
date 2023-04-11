@@ -94,16 +94,17 @@ class UserController {
     async register(req, res) {
             try {
                 const { account, mail_address, password } = req.body;
-                const [checking_ret] = await userDAO.checkMailOrAccountRegistered(mail_address);
-                if(!checking_ret || Object.keys(checking_ret).length !== 0 ){
+                const checking_ret = await userDAO.checkMailOrAccountRegistered(account, mail_address);
+                if(Object.keys(checking_ret).length !== 0 ){
                     if(checking_ret.account == account) {
                         throw new Error("This mail address has been registered");
                     } else {
                         throw new Error("This account has been registered");
                     }
                 }
+                console.log("a");
                 const ret = await userDAO.register(account, mail_address, password);
-                res.status(201).json({message: ret});
+                res.status(201).json(ret);
             } catch (err) {
                 return res.status(400).send(err);
             }

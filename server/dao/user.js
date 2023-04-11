@@ -78,7 +78,9 @@ class UserDAO {
     async register(account, mail_address, password){
         const user_id = await knex("user_account")
             .insert({
-                account, mail_address, password
+                "account":account,
+                "mail_address": mail_address,
+                "password": password
             },['id']);
         return user_id;
     }
