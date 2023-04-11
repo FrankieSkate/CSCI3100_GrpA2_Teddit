@@ -103,8 +103,8 @@ class UserController {
                     }
                 }
                 console.log("a");
-                const ret = await userDAO.register(account, mail_address, password);
-                res.status(201).json(ret);
+                const [ret] = await userDAO.register(account, mail_address, password);
+                res.status(201).json([ret]);
             } catch (err) {
                 return res.status(400).send(err);
             }
