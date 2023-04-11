@@ -1,20 +1,18 @@
-const router = require('express').Router();
-const knex = require('../data/db');
-const userController = require('../controllers/user');
+import express from "express";
+import {
+  getUser,
+  getUserFriends,
+  addRemoveFriend,
+} from "../controllers/users.js";
+import { verifyToken } from "../middleware/auth.js";
 
-router.route('/test')
-    .get((req, res) => {
-        res.send('test');
-    });
+const router = express.Router();
 
-router.post('/login',userController.userLogin);
+/* READ */
+router.get("/:id", verifyToken, getUser);
+router.get("/:id/friends", verifyToken, getUserFriends);
 
-router.post('/follow', userController.follow);
+/* UPDATE */
+router.patch("/:id/:friendId", verifyToken, addRemoveFriend);
 
-router.get('/getFollower', userController.getFollower);
-
-router.get('/getFollowing', userController.getFollowing);
-
-router.post('/register', userController.register);
-
-module.exports = router;
+export default router;
