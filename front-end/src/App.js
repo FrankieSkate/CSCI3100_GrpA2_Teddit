@@ -4,6 +4,7 @@ import LoginPage from "./scenes/loginPage";
 import ProfilePage from "./scenes/profilePage";
 import AdminPage from "./scenes/adminPage";
 import ChatroomPage from "./scenes/chatroomPage";
+import GuestPage from "./scenes/guestPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -20,7 +21,8 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={<GuestPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route
               path="/home"
