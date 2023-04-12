@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import "./chatOnline.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useTheme } from "@mui/material";
 
-export default function ChatOnline({ currentId }) {
+export default function ChatOnline({ onlineUsers, currentId, setCurrentChat }) {
+  const { palette } = useTheme();
   const token = useSelector(state => state.token);
   const [friends, setFriends] = useState([]);
 

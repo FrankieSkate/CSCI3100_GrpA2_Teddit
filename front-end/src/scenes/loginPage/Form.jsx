@@ -228,6 +228,35 @@ const Form = () => {
                 ? "Don't have an account? Sign Up here."
                 : "Already have an account? Login here."}
             </Typography>
+
+            <Typography
+              onClick={() => navigate("/forgot")}
+              sx={{
+                textDecoration: "underline",
+                color: palette.primary.main,
+                "&:hover": {
+                  cursor: "pointer",
+                  color: palette.primary.dark,
+                },
+              }}
+            >
+              {"Forgot password?"}
+            </Typography>  
+
+            <Typography
+              onClick={() => navigate("/reset")}
+              sx={{
+                textDecoration: "underline",
+                color: palette.primary.main,
+                "&:hover": {
+                  cursor: "pointer",
+                  color: palette.primary.dark,
+                },
+              }}
+            >
+              {"Reset password"}
+            </Typography>   
+            
           </Box>
         </form>
       )}

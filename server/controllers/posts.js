@@ -107,12 +107,23 @@ export const likePost = async (req, res) => {
   }
 };
 
+// add comment
+export const addComment = async (req, res) => {
+  try {
+    const { postId, comment } = req.body;
+    await Post.findByIdAndUpdate(postId, comment);
+  } catch (err) {
+    res.status(409).json({ message: err.message });
+  }
+};
+
 /* DELETE */
 export const deletePost = async (req, res) => {
   try {
     const { postId } = req.body;
-    Post.findByIdAndDelete({ postId });
-    res.status(200).json("deleted successfully");
+    const ret = await Post.findByIdAndDelete(postId);
+    if (ret) res.status(200).json("Success delete!");
+    else res.status(400).json({ message: "fuck you" });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
