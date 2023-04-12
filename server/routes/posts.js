@@ -21,6 +21,7 @@ router.get("/:userId/posts", verifyToken, getUserPosts);
 /* UPDATE */
 router.patch("/:id/like", verifyToken, likePost);
 
+router.post("/comment", verifyToken, addComment);
 /* DELETE */
 router.post("/delete", verifyToken, deletePost);
 

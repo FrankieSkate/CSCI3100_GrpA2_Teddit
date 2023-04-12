@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Form from "./Form";
 
-const LoginPage = () => {
+const ForgotPage = () => {
   const theme = useTheme();
   return (
     <Box>
@@ -24,7 +24,7 @@ const LoginPage = () => {
         backgroundColor={theme.palette.background.alt}
       >
         <Typography fontWeight="600" variant="h5" sx={{ mb: "1.5rem" }}>
-          Welcome to TEDDIT, a social media that was cloned from Twitter
+          Forgot Password
         </Typography>
         <Form />
       </Box>
@@ -32,4 +32,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ForgotPage;
