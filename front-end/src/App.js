@@ -5,6 +5,8 @@ import ProfilePage from "./scenes/profilePage";
 import AdminPage from "./scenes/adminPage";
 import ChatroomPage from "./scenes/chatroomPage";
 import GuestPage from "./scenes/guestPage";
+import ForgotPage from "./scenes/forgotPage";
+import ResetPage from "./scenes/resetPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -24,6 +26,8 @@ function App() {
             <Route path="/" element={<GuestPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/forgot" element={<ForgotPage />} />
+            <Route path="/reset" element={<ResetPage />} />
             <Route
               path="/home"
               element={isAuth ? <HomePage /> : <Navigate to="/" />}
