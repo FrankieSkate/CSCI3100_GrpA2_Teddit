@@ -1,14 +1,13 @@
-import Conversation from "../../components/Conversation";
-import Message from "../../components/Message";
-import FriendListWidget from "../widgets/FriendListWidget";
-import Chatroom from "../widgets/Chatroom";
-import Navbar from "../navbar";
-import { Box, InputBase, useTheme, IconButton} from "@mui/material";
-import { Search} from "@mui/icons-material";
+import "./messenger.css";
+// import ChatOnline from "../../components/chatOnline/ChatOnline";
+import Conversation from "../../components/conversation/Conversation";
+import Message from "../../components/message/Message";
+import FriendListWidget from "../../scenes/widgets/FriendListWidget";
+import Navbar from "../../scenes/navbar";
+import { Box } from "@mui/material";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import FlexBetween from "../../components/FlexBetween";
 
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
@@ -21,8 +20,6 @@ export default function Messenger() {
   const friends = useSelector(state => state.user.friends);
   const socket = useRef();
   const scrollRef = useRef();
-  const theme = useTheme();
-  const neutralLight = theme.palette.neutral.light;
 
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
@@ -51,7 +48,7 @@ export default function Messenger() {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await fetch(`http://localhost:8002/conversations/${_id}`, {
+        const res = await fetch(`http://localhost:3001/conversations/${_id}`, {
           method: "GET",
         });
         const data = await res.json();
@@ -67,7 +64,7 @@ export default function Messenger() {
     const getMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8002/messages/${currentChat?._id}`,
+          `http://localhost:3001/messages/${currentChat?._id}`,
           {
             method: "GET",
           }
@@ -98,7 +95,7 @@ export default function Messenger() {
     });
 
     try {
-      const res = await fetch(`http://localhost:8002/messages`, {
+      const res = await fetch(`http://localhost:3001/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(message),
@@ -118,41 +115,17 @@ export default function Messenger() {
   return (
     <Box>
       <Navbar />
-      <Box
-          width="100%"
-          padding="2rem 6%"
-          display="flex"
-          gap="2rem"
-          justifyContent="center"
-      >
-      
-      <Box flexBasis="26%">
-        
       <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-          <FlexBetween
-              backgroundColor={neutralLight}
-              borderRadius="0.5rem"
-              gap="3rem"
-              padding="0.1rem 1.5rem"
-          >
-            <InputBase placeholder="Search for friends" className="chatMenuInput" />
-
-            <IconButton>
-            <Search />
-            </IconButton>
-
-          </FlexBetween >
-          <Box m="1rem 0"/>
-          {conversations.map((c, index) => (
+            <input placeholder="Search for friends" className="chatMenuInput" />
+            {conversations.map((c, index) => (
               <div key={index} onClick={() => setCurrentChat(c)}>
                 <Conversation conversation={c} currentUserId={_id} />
               </div>
             ))}
           </div>
         </div>
-
         <div className="chatBox">
           <div className="chatBoxWrapper">
             {currentChat ? (
@@ -178,24 +151,17 @@ export default function Messenger() {
               </>
             ) : (
               <span className="noConversationText">
+                Open a conversation to start a chat.
               </span>
             )}
           </div>
         </div>
-        
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
             <FriendListWidget userId={_id} />
           </div>
         </div>
       </div>
-      </Box>
-
-      <Box flexBasis="42%">
-          <Chatroom  />
-      </Box>
-
-      </Box>
     </Box>
   );
 }
