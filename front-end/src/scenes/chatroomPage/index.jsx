@@ -1,5 +1,6 @@
-import Conversation from "../../components/Conversation";
-import Message from "../../components/Message";
+import "./messenger.css";
+import Conversation from "../../components/conversation/Conversation";
+import Message from "../../components/message/Message";
 import FriendListWidget from "../widgets/FriendListWidget";
 import Navbar from "../navbar";
 import { Box } from "@mui/material";

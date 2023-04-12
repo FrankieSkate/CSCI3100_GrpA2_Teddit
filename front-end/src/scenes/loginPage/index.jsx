@@ -12,7 +12,7 @@ const LoginPage = () => {
         textAlign="center"
       >
         <Typography fontWeight="bold" fontSize="48px" color="primary">
-          Teddit
+          TEDDIT
         </Typography>
       </Box>
 
