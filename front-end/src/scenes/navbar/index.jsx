@@ -24,6 +24,13 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const fullName = `${user.firstName} ${user.lastName}`;
+  const iconStyle = {
+    fontSize: "25px",
+    "&:hover": {
+      color: primaryLight,
+      cursor: "pointer",
+    },
+  };
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -33,12 +40,7 @@ const Navbar = () => {
           fontSize="clamp(1rem, 2rem, 2.25rem)"
           color="primary"
           onClick={() => navigate("/home")}
-          sx={{
-            "&:hover": {
-              color: primaryLight,
-              cursor: "pointer",
-            },
-          }}
+          sx={iconStyle}
         >
           TEDDIT
         </Typography>
@@ -56,8 +58,8 @@ const Navbar = () => {
       </FlexBetween>
       {/* after login */}
       <FlexBetween gap="2rem">
-        <Message sx={{ fontSize: "25px" }} />
-        <Notifications sx={{ fontSize: "25px" }} />
+        <Message sx={iconStyle} onClick={() => navigate("/chatroom")} />
+        <Notifications sx={iconStyle} />
         <FormControl variant="standard" value={fullName}>
           <Select
             value={fullName}

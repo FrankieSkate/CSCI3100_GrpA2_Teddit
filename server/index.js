@@ -11,11 +11,15 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
+import conversationRoutes from "./routes/conversations.js";
+import messageRoutes from "./routes/messages.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import User from "./models/User.js";
 import Post from "./models/Post.js";
+import Conversation from "./models/Conversation.js";
+import Message from "./models/Message.js";
 import { users, posts } from "./data/index.js";
 
 /* CONFIGURATIONS */
@@ -51,6 +55,8 @@ app.post("/posts", verifyToken, upload.single("picture"), createPost);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+app.use("/conversations", conversationRoutes);
+app.use("/messages", messageRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 8002;
@@ -63,7 +69,8 @@ mongoose
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
     /* ADD DATA ONE TIME */
-    User.insertMany(users);
-    Post.insertMany(posts);
+    // User.insertMany(users);
+    // Post.insertMany(posts);
+    // Conversation.insertMany(conversations);
   })
   .catch(error => console.log(`${error} did not connect`));
