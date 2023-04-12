@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom"; 
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state";
 import Dropzone from "react-dropzone";
@@ -22,7 +22,7 @@ const loginSchema = yup.object().shape({
   password: yup.string().required("required"),
 });
 
-const initialValuesRegister = {
+const defaultRegisterValues = {
   firstName: "",
   lastName: "",
   email: "",
@@ -30,7 +30,7 @@ const initialValuesRegister = {
   picture: "",
 };
 
-const initialValuesLogin = {
+const defaultLoginValues = {
   email: "",
   password: "",
 };
@@ -44,7 +44,6 @@ const Form = () => {
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
-    // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
@@ -52,7 +51,7 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
 
     const savedUserResponse = await fetch(
-      "http://localhost:8002/auth/register",
+      "http://localhost:3000/auth/register",
       {
         method: "POST",
         body: formData,
@@ -67,7 +66,7 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:8002/auth/login", {
+    const loggedInResponse = await fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
@@ -93,7 +92,7 @@ const Form = () => {
   return (
     <Formik
       onSubmit={handleFormSubmit}
-      initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
+      initialValues={isLogin ? defaultLoginValues : defaultRegisterValues}
       validationSchema={isLogin ? loginSchema : registerSchema}
     >
       {({
@@ -109,71 +108,15 @@ const Form = () => {
         <form onSubmit={handleSubmit}>
           <Box
             display="grid"
-            gap="30px"
+            gap="40px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+            sx={{
+              "& > div": { gridColumn: "span 4" },
+            }}
           >
-            {isRegister && (
-              <>
-                <TextField
-                  label="First Name"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.firstName}
-                  name="firstName"
-                  error={
-                    Boolean(touched.firstName) && Boolean(errors.firstName)
-                  }
-                  helperText={touched.firstName && errors.firstName}
-                  sx={{ gridColumn: "span 2" }}
-                />
-                <TextField
-                  label="Last Name"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.lastName}
-                  name="lastName"
-                  error={Boolean(touched.lastName) && Boolean(errors.lastName)}
-                  helperText={touched.lastName && errors.lastName}
-                  sx={{ gridColumn: "span 2" }}
-                />
-                <Box
-                  gridColumn="span 4"
-                  border={`1px solid ${palette.neutral.medium}`}
-                  borderRadius="5px"
-                  p="1rem"
-                >
-                  <Dropzone
-                    acceptedFiles=".jpg,.jpeg,.png"
-                    multiple={false}
-                    onDrop={acceptedFiles =>
-                      setFieldValue("picture", acceptedFiles[0])
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${palette.primary.main}`}
-                        p="1rem"
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                      >
-                        <input {...getInputProps()} />
-                        {!values.picture ? (
-                          <p>Add Picture Here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>{values.picture.name}</Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                  </Dropzone>
-                </Box>
-              </>
-            )}
 
             <TextField
-              label="Email"
+              label="Registered Email"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.email}
@@ -182,8 +125,9 @@ const Form = () => {
               helperText={touched.email && errors.email}
               sx={{ gridColumn: "span 4" }}
             />
+
             <TextField
-              label="Password"
+              label="Current Password"
               type="password"
               onBlur={handleBlur}
               onChange={handleChange}
@@ -193,9 +137,35 @@ const Form = () => {
               helperText={touched.password && errors.password}
               sx={{ gridColumn: "span 4" }}
             />
+
+            <TextField
+              label="New Password"
+              type="password"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.password}
+              name="password"
+              error={Boolean(touched.password) && Boolean(errors.password)}
+              helperText={touched.password && errors.password}
+              sx={{ gridColumn: "span 4" }}
+            />
+
+            <TextField
+              label="Comfirm New Password"
+              type="password"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.password}
+              name="password"
+              error={Boolean(touched.password) && Boolean(errors.password)}
+              helperText={touched.password && errors.password}
+              sx={{ gridColumn: "span 4" }}
+            />
+
           </Box>
 
           {/* BUTTONS */}
+
           <Box>
             <Button
               fullWidth
@@ -205,30 +175,33 @@ const Form = () => {
                 p: "1rem",
                 backgroundColor: palette.primary.main,
                 color: palette.background.alt,
-                "&:hover": { color: palette.primary.main },
+                "&:hover": { backgroundColor: palette.primary.dark },
               }}
             >
-              {isLogin ? "LOGIN" : "REGISTER"}
+              {"RESET"}
             </Button>
+
             <Typography
+              /*
               onClick={() => {
                 setPageType(isLogin ? "register" : "login");
                 resetForm();
               }}
+              */
+              onClick={() => navigate("/login")}
               sx={{
                 textDecoration: "underline",
                 color: palette.primary.main,
                 "&:hover": {
                   cursor: "pointer",
-                  color: palette.primary.light,
+                  color: palette.primary.dark,
                 },
               }}
             >
-              {isLogin
-                ? "Don't have an account? Sign Up here."
-                : "Already have an account? Login here."}
-            </Typography>
 
+              {"Already have an account? Login here."}
+            </Typography>
+            
             <Typography
               onClick={() => navigate("/forgot")}
               sx={{
@@ -241,7 +214,7 @@ const Form = () => {
               }}
             >
               {"Forgot password?"}
-            </Typography>  
+            </Typography>    
 
             <Typography
               onClick={() => navigate("/reset")}
@@ -256,7 +229,8 @@ const Form = () => {
             >
               {"Reset password"}
             </Typography>   
-            
+
+
           </Box>
         </form>
       )}
