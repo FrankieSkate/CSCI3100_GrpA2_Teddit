@@ -4,9 +4,8 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Navbar from "../navbar";
 import FriendListWidget from "../widgets/FriendListWidget";
-import UserPostWidget from "../widgets/UserPostWidget";
-import PostsWidget from "../widgets/PostsWidget";
 import UserWidget from "../widgets/UserWidget";
+import ProfilePosts from "./ProfilePosts";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -39,14 +38,13 @@ const ProfilePage = () => {
         justifyContent="center"
       >
         <Box flexBasis="25%">
+          <Box m="2rem 0" />
           <UserWidget userId={userId} picturePath={user.picturePath} />
           <Box m="2rem 0" />
           <FriendListWidget userId={userId} />
         </Box>
         <Box flexBasis="45%">
-          <UserPostWidget picturePath={user.picturePath} />
-          <Box m="2rem 0" />
-          <PostsWidget userId={userId} isProfile />
+          <ProfilePosts userId={userId} isProfile />
         </Box>
       </Box>
     </Box>
