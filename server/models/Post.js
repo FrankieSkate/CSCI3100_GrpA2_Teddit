@@ -26,6 +26,9 @@ const postSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    repost: {
+      type: postSchema,
+    }
   },
   { timestamps: true }
 );

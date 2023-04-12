@@ -26,6 +26,33 @@ export const createPost = async (req, res) => {
   }
 };
 
+/* repost*/
+export const repost = async (req, res) => {
+  try {
+    const { userId, description, repostId } = req.body;
+    const user = await User.findById(userId);
+    const re_post = await Post.findById(repostId);
+    const newPost = new Post({
+      userId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      location: user.location,
+      description,
+      userPicturePath: user.picturePath,
+      picturePath,
+      likes: {},
+      comments: [],
+      repost: re_post,
+    });
+    await newPost.save();
+
+    const post = await Post.find();
+    res.status(201).json(post);
+  } catch (err) {
+    res.status(409).json({ message: err.message });
+  }
+};
+
 /* READ */
 export const getFeedPosts = async (req, res) => {
   try {
