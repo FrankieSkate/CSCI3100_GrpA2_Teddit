@@ -1,24 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import "./conversation.css";
 
 export default function Conversation({ conversation, currentUserId }) {
   const [user, setUser] = useState(null);
   const token = useSelector(state => state.token);
 
-  useEffect(() => {
-    const friendId = conversation.members.find(m => m !== currentUserId);
+  const friendId = conversation.members.find(m => m !== currentUserId);
 
-    const getUser = async () => {
-      const response = await fetch(`http://localhost:8002/users/${friendId}`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await response.json();
-      setUser(data);
-    };
+  const getUser = async () => {
+    const response = await fetch(`http://localhost:8002/users/${friendId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    setUser(data);
+  };
+
+  useEffect(() => {
     getUser();
-  }, [currentUserId, conversation]);
+  }, []);
 
   if (!user) return null;
 
