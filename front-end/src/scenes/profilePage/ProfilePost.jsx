@@ -10,9 +10,8 @@ import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../../state";
+import { setPost } from "../../state";
 import UserImage from "../../components/UserImage";
-import { useEffect } from "react";
 const Post = ({
   postId,
   postUserId,
@@ -27,7 +26,6 @@ const Post = ({
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
   const loggedInUserId = useSelector(state => state.user._id);
-  const posts = useSelector(state => state.posts);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const { palette } = useTheme();
@@ -36,32 +34,28 @@ const Post = ({
   const primary = palette.primary.main;
 
   const patchLike = async () => {
-    const formData = new FormData();
-    formData.append("postId", postId);
     const response = await fetch(`http://localhost:8002/posts/${postId}/like`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: formData,
+      body: JSON.stringify({ userId: loggedInUserId }),
     });
-    const posts = await response.json();
-    dispatch(setPosts({ posts }));
+    const updatedPost = await response.json();
+    dispatch(setPost({ post: updatedPost }));
   };
 
-  const handleDelete = async () => {
-    await fetch(`http://localhost:8002/posts/delete`, {
+  const handleDelete = async posdId => {
+    const response = await fetch(`http://localhost:8002/posts/delete`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ postId }),
+      body: JSON.stringify({ postId: postId }),
     });
-    const temp_post = [...posts];
-    const newPost = temp_post.filter(post => post._id !== postId);
-    dispatch(setPosts(newPost));
+    const updatedPost = await response.json();
+    dispatch(setPost({ post: updatedPost }));
   };
 
   return (
@@ -86,7 +80,7 @@ const Post = ({
           </Box>
         </FlexBetween>
         <FlexBetween>
-          <IconButton onClick={handleDelete}>
+          <IconButton onClick={() => handleDelete(postId)}>
             <ClearIcon sx={{ color: primaryDark }} />
           </IconButton>
         </FlexBetween>
