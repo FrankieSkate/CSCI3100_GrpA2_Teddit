@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const forgotSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
 });
-
 const defaultForgetValues = {
   email: "",
 };
