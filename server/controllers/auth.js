@@ -11,8 +11,9 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const check = await User.findOne({ email: email });
-    if (uschecker) return res.status(400).json({ msg: "User does not exist." });
+    const useChecker = await User.findOne({ email: email });
+    if (useChecker)
+      return res.status(400).json({ msg: "User does not exist." });
 
     const newUser = new User({
       firstName,
