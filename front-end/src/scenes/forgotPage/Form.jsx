@@ -1,99 +1,39 @@
-import { useState } from "react";
 import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate} from "react-router-dom"; 
-import { useDispatch } from "react-redux";
-import { setLogin } from "../../state";
-import Dropzone from "react-dropzone";
-import FlexBetween from "../../components/FlexBetween";
+import { useNavigate } from "react-router-dom";
 
-const registerSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
+const forgotSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
-  picture: yup.string().required("required"),
 });
 
-const loginSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
-});
-
-const defaultRegisterValues = {
-  firstName: "",
-  lastName: "",
+const defaultForgetValues = {
   email: "",
-  password: "",
-  picture: "",
-};
-
-const defaultLoginValues = {
-  email: "",
-  password: "",
 };
 
 const Form = () => {
-  const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLogin = pageType === "login";
-  const isRegister = pageType === "register";
 
-  const register = async (values, onSubmitProps) => {
-    const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-    formData.append("picturePath", values.picture.name);
-
-    const savedUserResponse = await fetch(
-      "http://localhost:3000/auth/register",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
-
-    if (savedUser) {
-      setPageType("login");
-    }
-  };
-
-  const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3000/auth/login", {
+  const sendRegisterEmail = async (values, onSubmitProps) => {
+    await fetch("http://localhost:8002/auth/forgot", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
-    const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
-      navigate("/home");
-    }
+    navigate("/login");
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    if (isLogin) await login(values, onSubmitProps);
-    if (isRegister) await register(values, onSubmitProps);
+    sendRegisterEmail(values, onSubmitProps);
   };
 
   return (
     <Formik
       onSubmit={handleFormSubmit}
-      initialValues={isLogin ? defaultLoginValues : defaultRegisterValues}
-      validationSchema={isLogin ? loginSchema : registerSchema}
+      initialValues={defaultForgetValues}
+      validationSchema={forgotSchema}
     >
       {({
         values,
@@ -102,8 +42,6 @@ const Form = () => {
         handleBlur,
         handleChange,
         handleSubmit,
-        setFieldValue,
-        resetForm,
       }) => (
         <form onSubmit={handleSubmit}>
           <Box
@@ -114,8 +52,6 @@ const Form = () => {
               "& > div": { gridColumn: "span 4" },
             }}
           >
-
-
             <TextField
               label="Email"
               onBlur={handleBlur}
@@ -126,7 +62,6 @@ const Form = () => {
               helperText={touched.email && errors.email}
               sx={{ gridColumn: "span 4" }}
             />
-
           </Box>
 
           {/* BUTTONS */}
@@ -147,10 +82,6 @@ const Form = () => {
             </Button>
 
             <Typography
-              /*onClick={() => {
-                setPageType(isLogin ? "register" : "login");
-                resetForm();
-              }}*/
               onClick={() => navigate("/login")}
               sx={{
                 textDecoration: "underline",
@@ -163,20 +94,6 @@ const Form = () => {
             >
               {"Already have an account? Login here."}
             </Typography>
-            
-            <Typography
-              onClick={() => navigate("/forget")}
-              sx={{
-                textDecoration: "underline",
-                color: palette.primary.main,
-                "&:hover": {
-                  cursor: "pointer",
-                  color: palette.primary.dark,
-                },
-              }}
-            >
-              {"Forgot password?"}
-            </Typography>    
 
             <Typography
               onClick={() => navigate("/reset")}
@@ -190,9 +107,7 @@ const Form = () => {
               }}
             >
               {"Reset password"}
-            </Typography>   
-
-
+            </Typography>
           </Box>
         </form>
       )}

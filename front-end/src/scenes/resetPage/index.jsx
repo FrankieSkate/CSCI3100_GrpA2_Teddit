@@ -12,7 +12,7 @@ const ResetPage = () => {
         textAlign="center"
       >
         <Typography fontWeight="bold" fontSize="48px" color="primary">
-          Teddit
+          TEDDIT
         </Typography>
       </Box>
 
@@ -24,7 +24,7 @@ const ResetPage = () => {
         backgroundColor={theme.palette.background.alt}
       >
         <Typography fontWeight="600" variant="h5" sx={{ mb: "1.5rem" }}>
-         Reset Password
+          Reset Password
         </Typography>
         <Form />
       </Box>

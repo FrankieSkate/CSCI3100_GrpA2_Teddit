@@ -12,7 +12,7 @@ const LoginPage = () => {
         textAlign="center"
       >
         <Typography fontWeight="bold" fontSize="48px" color="primary">
-          Teddit
+          TEDDIT
         </Typography>
       </Box>
 
@@ -24,7 +24,7 @@ const LoginPage = () => {
         backgroundColor={theme.palette.background.alt}
       >
         <Typography fontWeight="600" variant="h5" sx={{ mb: "1.5rem" }}>
-          Welcome to Teddit, a social media that was cloned from Twitter
+          Welcome to TEDDIT, a social media that was cloned from Twitter
         </Typography>
         <Form />
       </Box>
