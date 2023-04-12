@@ -1,9 +1,7 @@
-import "./messenger.css";
-// import ChatOnline from "../../components/chatOnline/ChatOnline";
-import Conversation from "../../components/conversation/Conversation";
-import Message from "../../components/message/Message";
-import FriendListWidget from "../../scenes/widgets/FriendListWidget";
-import Navbar from "../../scenes/navbar";
+import Conversation from "../../components/Conversation";
+import Message from "../../components/Message";
+import FriendListWidget from "../widgets/FriendListWidget";
+import Navbar from "../navbar";
 import { Box } from "@mui/material";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -48,7 +46,7 @@ export default function Messenger() {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/conversations/${_id}`, {
+        const res = await fetch(`http://localhost:8002/conversations/${_id}`, {
           method: "GET",
         });
         const data = await res.json();
@@ -64,7 +62,7 @@ export default function Messenger() {
     const getMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3001/messages/${currentChat?._id}`,
+          `http://localhost:8002/messages/${currentChat?._id}`,
           {
             method: "GET",
           }
@@ -95,7 +93,7 @@ export default function Messenger() {
     });
 
     try {
-      const res = await fetch(`http://localhost:3001/messages`, {
+      const res = await fetch(`http://localhost:8002/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(message),

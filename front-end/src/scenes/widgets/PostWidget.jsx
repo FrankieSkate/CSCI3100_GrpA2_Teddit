@@ -4,15 +4,7 @@ import {
   FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
-import SendIcon from "@mui/icons-material/Send";
-import {
-  Box,
-  Divider,
-  IconButton,
-  Typography,
-  useTheme,
-  InputBase,
-} from "@mui/material";
+import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Friend from "../../components/Friend";
 import WidgetWrapper from "../../components/WidgetWrapper";
@@ -30,15 +22,12 @@ const PostWidget = ({
   likes,
   comments,
 }) => {
-  const theme = useTheme();
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
   const loggedInUserId = useSelector(state => state.user._id);
-  const neutralLight = theme.palette.neutral.light;
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
-  const [addComment, setAddComment] = useState("");
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -55,22 +44,6 @@ const PostWidget = ({
     });
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
-  };
-
-  const handleComment = async () => {
-    const formData = comments;
-    formData.append("comment", addComment);
-    const response = await fetch(
-      `http://localhost:8002/posts/${postId}/addcomment`,
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      }
-    );
-    const comment = await response.json();
-    dispatch(setAddComment(...comments, { comment }));
-    setAddComment("");
   };
 
   return (
@@ -128,22 +101,6 @@ const PostWidget = ({
             </Box>
           ))}
           <Divider />
-          <FlexBetween
-            backgroundColor={neutralLight}
-            borderRadius="0.5rem"
-            gap="3rem"
-            mt="1rem"
-            padding="0.1rem 1.5rem"
-            flexBasis="2 1"
-          >
-            <InputBase
-              sx={{ flexGrow: 1 }}
-              placeholder="Add your comments here..."
-            />
-            <IconButton onClick={handleComment}>
-              <SendIcon />
-            </IconButton>
-          </FlexBetween>
         </Box>
       )}
     </WidgetWrapper>
