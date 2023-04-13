@@ -12,7 +12,7 @@ const router = express.Router();
 
 /* READ */
 router.get("/:id", verifyToken, getUser);
-router.get("/search/:email", searchUserByUnqiue);
+router.get("/search/:username", searchUserByUnqiue);
 router.get("/:id/friends", verifyToken, getUserFriends);
 
 /* UPDATE */
