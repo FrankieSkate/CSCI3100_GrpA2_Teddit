@@ -43,7 +43,9 @@ const UsersList = () => {
         <Divider />
         <Box mt="1rem">
           {users &&
-            users.map(({ _id, firstName, lastName, email, createdAt }) => (
+            users
+            .filter(user => user.admin===0)
+            .map(({ _id, firstName, lastName, email, createdAt }) => (
               <UserInfo
                 key={_id}
                 userId={_id}
