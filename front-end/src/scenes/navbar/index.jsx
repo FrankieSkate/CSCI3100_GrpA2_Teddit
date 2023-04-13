@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   IconButton,
   InputBase,
@@ -9,14 +10,16 @@ import {
 } from "@mui/material";
 import { Search, Message, Notifications } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogout } from "../../state";
+import { setLogout, setSearch } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const inputRef = useRef("");
   const user = useSelector(state => state.user);
+  const token = useSelector(state => user.token);
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -31,6 +34,24 @@ const Navbar = () => {
       cursor: "pointer",
     },
   };
+
+  const searchTrigger = async (input) => {
+    try{
+      const [firstName, lastName]= input.split(" ")
+      const res = await fetch(`http://localhost:8002/users/search/${firstName}/${lastName}`, {
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const [data] = await res.json();
+      dispatch(setSearch({search: data}));
+      navigate("/search");
+    } catch (err) {
+      console.log("error",err);
+    }
+  }
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -50,8 +71,15 @@ const Navbar = () => {
           gap="3rem"
           padding="0.1rem 1.5rem"
         >
-          <InputBase placeholder="Search everything..." />
-          <IconButton>
+          <InputBase 
+            placeholder="Search everything..." 
+            type="text"
+            inputRef={inputRef}
+          />
+          <IconButton
+          onClick={() => {
+            searchTrigger(inputRef.current.value);
+          }}>
             <Search />
           </IconButton>
         </FlexBetween>

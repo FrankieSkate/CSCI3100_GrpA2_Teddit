@@ -127,7 +127,7 @@ export const addComment = async (req, res) => {
     const updatePost = await Post.findByIdAndUpdate(
       id,
       {
-        $push: { comments: { comment, userId } },
+        $push: { comments: { comment } },
       },
       { new: true }
     );

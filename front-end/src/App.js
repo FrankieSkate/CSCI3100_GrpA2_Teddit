@@ -4,6 +4,7 @@ import LoginPage from "./scenes/loginPage";
 import ProfilePage from "./scenes/profilePage";
 import AdminPage from "./scenes/adminPage";
 import ChatroomPage from "./scenes/chatroomPage";
+import SearchPage from "./scenes/searchPage";
 import GuestPage from "./scenes/guestPage";
 import ForgotPage from "./scenes/forgotPage";
 import ResetPage from "./scenes/resetPage";
@@ -28,7 +29,10 @@ function App() {
               path="/" 
               element={isAuth ? <Navigate to="/home"/> : <Navigate to="/login" />} 
             />
-            <Route path="/login" element={<LoginPage />} />
+            <Route 
+              path="/login" 
+              element={<LoginPage />} 
+            />
             <Route path="/guest" element={<GuestPage />} />
             <Route
               path="/admin"
@@ -47,6 +51,10 @@ function App() {
             <Route
               path="/chatroom"
               element={isAuth ? <ChatroomPage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/search"
+              element={isAuth ? <SearchPage /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>

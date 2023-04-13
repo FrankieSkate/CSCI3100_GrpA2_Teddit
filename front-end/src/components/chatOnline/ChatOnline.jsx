@@ -27,7 +27,7 @@ export default function ChatOnline({ onlineUsers, currentId, setCurrentChat }) {
 
   return (
     <div className="chatOnline">
-      {friends.map((o, i) => (
+      {friends && friends.map((o, i) => (
         <div key={i} className="chatOnlineFriend">
           <div className="chatOnlineImgContainer">
             <img

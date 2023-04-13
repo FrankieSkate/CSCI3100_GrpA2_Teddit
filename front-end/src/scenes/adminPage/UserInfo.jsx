@@ -3,7 +3,7 @@ import { Button, Box, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
 
-const UserInfo = ({ userId, name, createdDate, email, onClick= ()=> {} }) => {
+const UserInfo = ({ userId, name, createdDate, email, onClick= ()=> {}, search=false }) => {
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const dispatch = useDispatch();
@@ -41,12 +41,12 @@ const UserInfo = ({ userId, name, createdDate, email, onClick= ()=> {} }) => {
           onClick={onClick}
           sx={{
             color: palette.background.alt,
-            backgroundColor: palette.primary.red,
+            backgroundColor: (search) ? palette.primary.light : palette.primary.red,
             borderRadius: "0.5rem",
             "&:hover": { cursor: "pointer" },
           }}
         >
-          DELETE
+          {search? "FOLLOW" : "DELETE"}
         </Button>
       </Box>
     </Box>

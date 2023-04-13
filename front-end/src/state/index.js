@@ -6,6 +6,7 @@ const initialState = {
   token: null,
   posts: [],
   isAdmin: false,
+  search: null,
 };
 
 export const authSlice = createSlice({
@@ -45,6 +46,9 @@ export const authSlice = createSlice({
     setUsers: (state, action) => {
       state.users = action.payload.users;
     },
+    setSearch: (state, action) => {
+      state.search = action.payload.search;
+    }
   },
 });
 
@@ -56,5 +60,6 @@ export const {
   setPosts,
   setPost,
   setUsers,
+  setSearch,
 } = authSlice.actions;
 export default authSlice.reducer;
