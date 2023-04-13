@@ -107,16 +107,6 @@ export const likePost = async (req, res) => {
   }
 };
 
-// add comment
-export const addComment = async (req, res) => {
-  try {
-    const { postId, comment } = req.body;
-    await Post.findByIdAndUpdate(postId, comment);
-  } catch (err) {
-    res.status(409).json({ message: err.message });
-  }
-};
-
 /* DELETE */
 export const deletePost = async (req, res) => {
   try {
@@ -133,27 +123,28 @@ export const deletePost = async (req, res) => {
 export const addComment = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("post",id);
     const { comment, userId } = req.body;
     const updatePost = await Post.findByIdAndUpdate(
-      id, {
-      $push: { comments: { comment, userId } },
+      id,
+      {
+        $push: { comments: { comment, userId } },
       },
       { new: true }
     );
     res.status(200).json(updatePost);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(400).json({ message: err.message });
   }
-}
+};
 
 /* EDIT COMMENT */
 export const editComment = async (req, res) => {
   try {
     const { comment, postId, userId } = req.body;
     const updatePost = await Post.findByIdAndUpdate(
-      postId, {
-      $set: { "comments.$[elem].comment": comment },
+      postId,
+      {
+        $set: { "comments.$[elem].comment": comment },
       },
       {
         arrayFilters: [{ "elem.user_id": userId }],
@@ -162,22 +153,23 @@ export const editComment = async (req, res) => {
     );
     res.status(200).json(updatePost);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(400).json({ message: err.message });
   }
-}
+};
 
 /* DELETE COMMENT */
 export const deleteComment = async (req, res) => {
   try {
     const { postId, userId } = req.body;
     const updatePost = await Post.findByIdAndUpdate(
-      postId, {
-      $pull: { comments: { userId } },
+      postId,
+      {
+        $pull: { comments: { userId } },
       },
       { new: true }
     );
     res.status(200).json(updatePost);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(400).json({ message: err.message });
   }
-}
+};

@@ -1,8 +1,17 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Form from "./Form";
-
+import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const primaryLight = theme.palette.primary.light;
+  const iconStyle = {
+    fontSize: "25px",
+    "&:hover": {
+      color: primaryLight,
+      cursor: "pointer",
+    },
+  };
   return (
     <Box>
       <Box
@@ -11,7 +20,13 @@ const LoginPage = () => {
         p="1rem"
         textAlign="center"
       >
-        <Typography fontWeight="bold" fontSize="48px" color="primary">
+        <Typography
+          fontWeight="bold"
+          fontSize="48px"
+          color="primary"
+          onClick={() => navigate("/")}
+          sx={iconStyle}
+        >
           TEDDIT
         </Typography>
       </Box>

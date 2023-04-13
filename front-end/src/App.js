@@ -17,6 +17,7 @@ function App() {
   const mode = useSelector(state => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector(state => state.token));
+  const isAdmin = useSelector(state => state.isAdmin);
   return (
     <div className="app">
       <BrowserRouter>
@@ -25,7 +26,10 @@ function App() {
           <Routes>
             <Route path="/" element={<GuestPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route
+              path="/admin"
+              element={isAdmin ? <AdminPage /> : <Navigate to="/" />}
+            />
             <Route path="/forgot" element={<ForgotPage />} />
             <Route path="/reset" element={<ResetPage />} />
             <Route

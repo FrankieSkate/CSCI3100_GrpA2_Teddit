@@ -79,9 +79,11 @@ const Form = () => {
         setLogin({
           user: loggedIn.user,
           token: loggedIn.token,
+          isAdmin: loggedIn.user.admin,
         })
       );
-      navigate("/home");
+      if (loggedIn.user.admin) navigate("/admin");
+      else navigate("/home");
     }
   };
 
@@ -241,7 +243,7 @@ const Form = () => {
               }}
             >
               {"Forgot password?"}
-            </Typography>  
+            </Typography>
 
             <Typography
               onClick={() => navigate("/reset")}
@@ -255,8 +257,7 @@ const Form = () => {
               }}
             >
               {"Reset password"}
-            </Typography>   
-            
+            </Typography>
           </Box>
         </form>
       )}
