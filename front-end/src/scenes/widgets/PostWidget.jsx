@@ -55,7 +55,6 @@ const PostWidget = ({
       body: JSON.stringify({ userId: loggedInUserId }),
     });
     const updatedPost = await response.json();
-    console.log("like :", updatedPost);
     dispatch(setPost({ post: updatedPost }));
   };
 
@@ -72,7 +71,6 @@ const PostWidget = ({
       }
     );
     const updatedPost = await response.json();
-    console.log("comment:", updatedPost);
     dispatch(setPost({ post: updatedPost }));
     setAddComment("");
   };
@@ -144,8 +142,7 @@ const PostWidget = ({
             <Box key={`${name}-${index}`}>
               <Divider />
               <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {console.log(items.comment)}
-                {items.userId} : {items.comment}
+                {items.comment}
               </Typography>
             </Box>
           ))}
