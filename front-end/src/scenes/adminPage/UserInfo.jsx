@@ -2,14 +2,16 @@ import React from "react";
 import { Button, Box, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
-
-const UserInfo = ({ userId, name, createdDate, email, onClick= ()=> {}, search=false }) => {
+const UserInfo = ({
+  userId,
+  name,
+  createdDate,
+  email,
+  onClick = () => {},
+  search = false,
+}) => {
   const { palette } = useTheme();
   const main = palette.neutral.main;
-  const dispatch = useDispatch();
-  const token = useSelector(state => state.token);
-  const users = useSelector(state => state.users);
-
 
   return (
     <Box
@@ -41,12 +43,14 @@ const UserInfo = ({ userId, name, createdDate, email, onClick= ()=> {}, search=f
           onClick={onClick}
           sx={{
             color: palette.background.alt,
-            backgroundColor: (search) ? palette.primary.light : palette.primary.red,
+            backgroundColor: search
+              ? palette.primary.light
+              : palette.primary.red,
             borderRadius: "0.5rem",
             "&:hover": { cursor: "pointer" },
           }}
         >
-          {search? "FOLLOW" : "DELETE"}
+          {search ? "FOLLOW" : "DELETE"}
         </Button>
       </Box>
     </Box>
