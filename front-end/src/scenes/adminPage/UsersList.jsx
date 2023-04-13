@@ -1,13 +1,15 @@
 import UserInfo from "./UserInfo";
-import { Divider, Box } from "@mui/material";
+import { Divider, Box, Snackbar, Button, IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { useEffect } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUsers } from "../../state";
 const UsersList = () => {
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
   const users = useSelector(state => state.users);
+  const [open, setOpen] = useState(false);
 
   const getUsers = async () => {
     const response = await fetch("http://localhost:8002/users/getAll", {
@@ -18,7 +20,49 @@ const UsersList = () => {
     dispatch(setUsers({ users: data }));
   };
 
-  console.log("users :", users);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const onclickDelete = async (userId) => {
+    try{
+      await fetch(`http://localhost:8002/users/delete`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      }).then(() => {
+        const temp_users = [...users];
+        const newUsers = temp_users.filter(user => user._id !== userId);
+        dispatch(setUsers({ users:newUsers}));
+        setOpen(true);
+      })
+    } catch (err) {
+      console.log("error",err);
+    }
+  };
+
+  const action = (
+    <Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </Fragment>
+  );
 
   useEffect(() => {
     getUsers();
@@ -52,10 +96,18 @@ const UsersList = () => {
                 name={`${firstName} ${lastName}`}
                 email={email}
                 createdDate={createdAt}
+                onClick = {() => {onclickDelete(_id)}}
               />
             ))}
         </Box>
       </WidgetWrapper>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        message="Success"
+        action={action}
+      />
     </>
   );
 };

@@ -1,28 +1,15 @@
 import React from "react";
 import { Button, Box, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setUsers } from "../../state";
-const UserInfo = ({ userId, name, createdDate, email }) => {
+
+
+const UserInfo = ({ userId, name, createdDate, email, onClick= ()=> {} }) => {
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
   const users = useSelector(state => state.users);
 
-  console.log("testing users", users);
-  const handleDelete = async () => {
-    await fetch(`http://localhost:8002/users/delete`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId }),
-    });
-    const temp_users = [...users];
-    const newUsers = temp_users.filter(user => user._id !== userId);
-    dispatch(setUsers(newUsers));
-  };
 
   return (
     <Box
@@ -51,7 +38,7 @@ const UserInfo = ({ userId, name, createdDate, email }) => {
 
       <Box flexBasis="20%">
         <Button
-          onClick={handleDelete}
+          onClick={onClick}
           sx={{
             color: palette.background.alt,
             backgroundColor: palette.primary.red,

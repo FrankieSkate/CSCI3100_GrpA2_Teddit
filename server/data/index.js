@@ -20,7 +20,7 @@ export const users = [
     password: "qwer1234",
     picturePath: "p11.jpeg",
     friends: [],
-    admin: 1,
+    admin: 0,
     viewedProfile: 14561,
     impressions: 888822,
     createdAt: 1115211422,

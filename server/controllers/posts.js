@@ -112,8 +112,8 @@ export const deletePost = async (req, res) => {
   try {
     const { postId } = req.body;
     const ret = await Post.findByIdAndDelete(postId);
-    if (ret) res.status(200).json("Success delete!");
-    else res.status(400).json({ message: "fuck you" });
+    if (ret) res.status(200).json(ret);
+    else res.status(400).json({ message: "Fail to delete" });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
