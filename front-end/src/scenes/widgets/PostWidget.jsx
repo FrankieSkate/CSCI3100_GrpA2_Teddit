@@ -39,6 +39,7 @@ const PostWidget = ({
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const [addComment, setAddComment] = useState("");
+  const isRepost = "true"
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -92,6 +93,20 @@ const PostWidget = ({
           src={`http://localhost:8002/assets/${picturePath}`}
         />
       )}
+    
+      {!isRepost && (
+        <WidgetWrapper m="2rem 0" sx={{ ml: '4.5rem', border: '1px solid gray'}}>
+          <Friend
+            friendId={postUserId}
+            name={name}
+            userPicturePath={userPicturePath}
+          />
+          <Typography color={main} sx={{ mt: "1rem" }}>
+            {description}
+          </Typography>
+        </WidgetWrapper>
+      )}
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
