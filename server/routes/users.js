@@ -3,16 +3,18 @@ import {
   getUser,
   getUserFriends,
   addRemoveFriend,
-  searchUserByUnqiue,
-  deleteUser
+  searchUserByUnique,
+  deleteUser,
+  getAllUser,
 } from "../controllers/users.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
 /* READ */
+router.get("/getAll", verifyToken, getAllUser);
 router.get("/:id", verifyToken, getUser);
-router.get("/search/:username", searchUserByUnqiue);
+router.get("/search/:username", searchUserByUnique);
 router.get("/:id/friends", verifyToken, getUserFriends);
 
 /* UPDATE */
