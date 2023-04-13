@@ -1,36 +1,29 @@
 import UserInfo from "./UserInfo";
 import { Divider, Box } from "@mui/material";
 import WidgetWrapper from "../../components/WidgetWrapper";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setUsers } from "../../state";
 const UsersList = () => {
-  const userLists = [
-    {
-      _Id: "1",
-      userId: "abc",
-      firstName: "Jimmy",
-      lastName: "Hung",
-      password: "12345678",
-      createdDate: "07/04/2023",
-    },
-    {
-      _Id: "2",
-      userId: "abd",
-      firstName: "Frankie",
-      lastName: "Kwok",
-      password: "12345678",
-      createdDate: "07/04/2023",
-    },
-    {
-      _Id: "3",
-      userId: "abe",
-      firstName: "Anthony",
-      lastName: "Leung",
-      password: "12345678",
-      createdDate: "07/04/2023",
-    },
-  ];
-  const deleteUser = _id => {};
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.token);
+  const users = useSelector(state => state.users);
 
-  const editUser = _id => {};
+  const getUsers = async () => {
+    const response = await fetch("http://localhost:8002/users/getAll", {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    dispatch(setUsers({ users: data }));
+  };
+
+  console.log("users :", users);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   return (
     <>
       <WidgetWrapper>
@@ -41,27 +34,24 @@ const UsersList = () => {
           justifyContent="space-between"
           flex-direction="column"
         >
-          <Box flexBasis="20%">{"User Id"}</Box>
-          <Box flexBasis="20%">{"Name"}</Box>
-          <Box flexBasis="20%">{"Password"}</Box>
-          <Box flexBasis="20%">{"Created date"}</Box>
+          <Box flexBasis="30%">{"User Id"}</Box>
+          <Box flexBasis="30%">{"Name"}</Box>
+          <Box flexBasis="30%">{"Registered Email"}</Box>
+          <Box flexBasis="30%">{"Created date"}</Box>
           <Box flexBasis="20%">{"Action"}</Box>
         </Box>
         <Divider />
         <Box mt="1rem">
-          {userLists.map(
-            ({ _id, userId, firstName, lastName, createdDate, password }) => (
+          {users &&
+            users.map(({ _id, firstName, lastName, email, createdAt }) => (
               <UserInfo
                 key={_id}
-                userId={userId}
+                userId={_id}
                 name={`${firstName} ${lastName}`}
-                createdDate={createdDate}
-                password={password}
-                deleteUser={deleteUser}
-                editUser={editUser}
+                email={email}
+                createdDate={createdAt}
               />
-            )
-          )}
+            ))}
         </Box>
       </WidgetWrapper>
     </>

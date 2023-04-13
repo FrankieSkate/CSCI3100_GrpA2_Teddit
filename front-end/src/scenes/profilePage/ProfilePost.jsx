@@ -12,10 +12,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../../state";
 import UserImage from "../../components/UserImage";
-import { useEffect } from "react";
 const Post = ({
   postId,
-  postUserId,
+
   name,
   description,
   picturePath,
