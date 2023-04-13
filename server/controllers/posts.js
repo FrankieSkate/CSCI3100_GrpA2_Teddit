@@ -107,16 +107,6 @@ export const likePost = async (req, res) => {
   }
 };
 
-// add comment
-export const addComment = async (req, res) => {
-  try {
-    const { postId, comment } = req.body;
-    await Post.findByIdAndUpdate(postId, comment);
-  } catch (err) {
-    res.status(409).json({ message: err.message });
-  }
-};
-
 /* DELETE */
 export const deletePost = async (req, res) => {
   try {
