@@ -18,7 +18,7 @@ import Friend from "../../components/Friend";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPost } from "../../state";
+import { setPost, setComment } from "../../state";
 
 const PostWidget = ({
   postId,
@@ -34,12 +34,12 @@ const PostWidget = ({
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
+  const { _id } = useSelector(state => state.user);
   const loggedInUserId = useSelector(state => state.user._id);
   const neutralLight = theme.palette.neutral.light;
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
-  const [addComment, setAddComment] = useState("");
-
+  const isRepost = true;
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
@@ -51,25 +51,27 @@ const PostWidget = ({
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: loggedInUserId }),
+      body: JSON.stringify({ _userId: loggedInUserId }),
     });
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
   };
 
+  const [addComment, setAddComment] = useState("");
+
   const handleComment = async () => {
-    const formData = comments;
-    formData.append("comment", addComment);
     const response = await fetch(
-      `http://localhost:8002/posts/${postId}/addcomment`,
+      `http://localhost:8002/posts/${postId}/comment`,
       {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+        body: JSON.stringify({ comment: addComment }),
       }
     );
-    const comment = await response.json();
-    dispatch(setAddComment(...comments, { comment }));
+    console.log("new comment", addComment);
+    const updatedComment = await response.json();
+    console.log("new comment2", updatedComment);
+    dispatch(setComment({ comment: updatedComment }));
     setAddComment("");
   };
 
@@ -88,10 +90,27 @@ const PostWidget = ({
           width="100%"
           height="auto"
           alt="user's post"
-          style={{ borderRadius: "0.trem", marginTop: "1rem" }}
+          style={{ borderRadius: "0.2rem", marginTop: "1rem" }}
           src={`http://localhost:8002/assets/${picturePath}`}
         />
       )}
+
+      {!isRepost && (
+        <WidgetWrapper
+          m="2rem 0"
+          sx={{ ml: "4.5rem", border: "1px solid gray" }}
+        >
+          <Friend
+            friendId={postUserId}
+            name={name}
+            userPicturePath={userPicturePath}
+          />
+          <Typography color={main} sx={{ mt: "1rem" }}>
+            {description}
+          </Typography>
+        </WidgetWrapper>
+      )}
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
@@ -123,8 +142,7 @@ const PostWidget = ({
             <Box key={`${name}-${index}`}>
               <Divider />
               <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {console.log(items.comment)}
-                {items.userId} : {items.comment}
+                {items.comment}
               </Typography>
             </Box>
           ))}
@@ -139,6 +157,7 @@ const PostWidget = ({
           >
             <InputBase
               sx={{ flexGrow: 1 }}
+              onChange={e => setAddComment(e.target.value)}
               placeholder="Add your comments here..."
             />
             <IconButton onClick={handleComment}>

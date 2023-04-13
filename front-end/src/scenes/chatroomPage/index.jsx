@@ -48,7 +48,7 @@ export default function Messenger() {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/conversations/${_id}`, {
+        const res = await fetch(`http://localhost:8002/conversations/${_id}`, {
           method: "GET",
         });
         const data = await res.json();
@@ -64,7 +64,7 @@ export default function Messenger() {
     const getMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3001/messages/${currentChat?._id}`,
+          `http://localhost:8002/messages/${currentChat?._id}`,
           {
             method: "GET",
           }
@@ -95,7 +95,7 @@ export default function Messenger() {
     });
 
     try {
-      const res = await fetch(`http://localhost:3001/messages`, {
+      const res = await fetch(`http://localhost:8002/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(message),

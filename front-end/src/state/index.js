@@ -45,6 +45,14 @@ export const authSlice = createSlice({
     setUsers: (state, action) => {
       state.users = action.payload.users;
     },
+    setComment: (state, action) => {
+      const updatedComments = state.posts.map(comment => {
+        if (comment._id === action.payload.comment._id)
+          return action.payload.comment;
+        return comment;
+      });
+      state.comments = updatedComments;
+    },
   },
 });
 
@@ -56,5 +64,6 @@ export const {
   setPosts,
   setPost,
   setUsers,
+  setComment,
 } = authSlice.actions;
 export default authSlice.reducer;
