@@ -39,7 +39,7 @@ const PostWidget = ({
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const [addComment, setAddComment] = useState("");
-  const isRepost = "true"
+  const isRepost = "true";
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -55,22 +55,25 @@ const PostWidget = ({
       body: JSON.stringify({ userId: loggedInUserId }),
     });
     const updatedPost = await response.json();
+    console.log("like :", updatedPost);
     dispatch(setPost({ post: updatedPost }));
   };
 
   const handleComment = async () => {
-    const formData = comments;
-    formData.append("comment", addComment);
     const response = await fetch(
-      `http://localhost:8002/posts/${postId}/addcomment`,
+      `http://localhost:8002/posts/${postId}/comment`,
       {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: loggedInUserId, comment: addComment }),
       }
     );
-    const comment = await response.json();
-    dispatch(setAddComment(...comments, { comment }));
+    const updatedPost = await response.json();
+    console.log("comment:", updatedPost);
+    dispatch(setPost({ post: updatedPost }));
     setAddComment("");
   };
 
@@ -93,9 +96,12 @@ const PostWidget = ({
           src={`http://localhost:8002/assets/${picturePath}`}
         />
       )}
-    
+
       {!isRepost && (
-        <WidgetWrapper m="2rem 0" sx={{ ml: '4.5rem', border: '1px solid gray'}}>
+        <WidgetWrapper
+          m="2rem 0"
+          sx={{ ml: "4.5rem", border: "1px solid gray" }}
+        >
           <Friend
             friendId={postUserId}
             name={name}
@@ -155,6 +161,7 @@ const PostWidget = ({
             <InputBase
               sx={{ flexGrow: 1 }}
               placeholder="Add your comments here..."
+              onChange={e => setAddComment(e.target.value)}
             />
             <IconButton onClick={handleComment}>
               <SendIcon />
