@@ -19,6 +19,8 @@ import WidgetWrapper from "../../components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../state";
+import moment from "moment";
+import { useEffect } from "react";
 
 const PostWidget = ({
   postId,
@@ -29,6 +31,7 @@ const PostWidget = ({
   userPicturePath,
   likes,
   comments,
+  createdAt,
 }) => {
   const theme = useTheme();
   const [isComments, setIsComments] = useState(false);
@@ -40,6 +43,25 @@ const PostWidget = ({
   const likeCount = Object.keys(likes).length;
   const [addComment, setAddComment] = useState("");
   const isRepost = "true";
+
+  const [timestamp, setTimestamp] = useState(createdAt);
+  const [displayTimestamp, setDisplayTimestamp] = useState("");
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = moment();
+      const timeDiff = moment.duration(now.diff(timestamp));
+      if (timeDiff.asSeconds() < 60) {
+        setDisplayTimestamp("just now");
+      } else if (timeDiff.asHours() < 1) {
+        const minutes = Math.floor(timeDiff.asMinutes());
+        setDisplayTimestamp(`${minutes} minute${minutes > 1 ? "s" : ""} ago`);
+      } else {
+        setDisplayTimestamp(moment(timestamp).format("MMM D, YYYY h:mm:ss A"));
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [timestamp]);
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -83,6 +105,10 @@ const PostWidget = ({
         userPicturePath={userPicturePath}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
+        {"posted at "}
+        {displayTimestamp}
+      </Typography>
+      <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
       {picturePath && (
@@ -90,7 +116,7 @@ const PostWidget = ({
           width="100%"
           height="auto"
           alt="user's post"
-          style={{ borderRadius: "0.trem", marginTop: "1rem" }}
+          style={{ borderRadius: "0.2rem", marginTop: "1rem" }}
           src={`http://localhost:8002/assets/${picturePath}`}
         />
       )}
