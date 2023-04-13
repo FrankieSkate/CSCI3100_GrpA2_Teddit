@@ -164,7 +164,8 @@ export const deleteComment = async (req, res) => {
     const updatePost = await Post.findByIdAndUpdate(
       postId,
       {
-        $pull: { comments: { userId } },
+        // $pull: { comments: { userId } },
+        $push: { comments: { comment, userId } },
       },
       { new: true }
     );
