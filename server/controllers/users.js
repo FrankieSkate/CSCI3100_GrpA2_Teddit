@@ -13,8 +13,8 @@ export const getUser = async (req, res) => {
 
 export const searchUserByUnqiue = async (req, res) => {
   try {
-    const { email } = req.params;
-    const user = await User.findOne({email: email});
+    const { username } = req.params;
+    const user = await User.findOne({userName: username});
     res.status(200).json(user);
   } catch (err) {
     res.status(404).json({ message: err.message });
