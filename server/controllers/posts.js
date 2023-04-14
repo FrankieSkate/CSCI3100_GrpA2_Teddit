@@ -38,10 +38,10 @@ export const repost = async (req, res) => {
       location: user.location,
       description,
       userPicturePath: user.picturePath,
-      picturePath,
+      picturePath: "",
       likes: {},
       comments: [],
-      repost: re_post,
+      repost: [re_post],
     });
     await newPost.save();
 
