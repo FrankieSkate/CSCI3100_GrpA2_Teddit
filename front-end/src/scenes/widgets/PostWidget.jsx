@@ -3,6 +3,7 @@ import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
   ShareOutlined,
+  ReplyOutlined
 } from "@mui/icons-material";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -32,6 +33,8 @@ const PostWidget = ({
   likes,
   comments,
   createdAt,
+  re_post=false,
+  re_post_by='',
 }) => {
   const theme = useTheme();
   const [isComments, setIsComments] = useState(false);
@@ -97,6 +100,23 @@ const PostWidget = ({
     setAddComment("");
   };
 
+  const repost = async () => {
+    const response = await fetch(
+      `http://localhost:8002/repost`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: loggedInUserId, description: "", postId:postId }),
+      }
+    )
+    const updatedPosts = await response.json();
+    console.log(updatedPosts);
+    dispatch(setPost({ post: updatedPosts }));
+  }
+
   return (
     <WidgetWrapper m="2rem 0">
       <Friend
@@ -105,8 +125,9 @@ const PostWidget = ({
         userPicturePath={userPicturePath}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
-        {"posted at "}
-        {displayTimestamp}
+        {!re_post &&"posted at "}
+        {!re_post && displayTimestamp}
+        {re_post && ` repost by ${re_post_by}`}
       </Typography>
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
@@ -155,6 +176,12 @@ const PostWidget = ({
               <ChatBubbleOutlineOutlined />
             </IconButton>
             <Typography>{comments.length}</Typography>
+          </FlexBetween>
+
+          <FlexBetween gap="0.3rem">
+            <IconButton onClick={() => repost()}>
+              <ReplyOutlined />
+            </IconButton>
           </FlexBetween>
         </FlexBetween>
 
