@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Navbar from "../navbar";
 import { useNavigate } from "react-router-dom";
 import WidgetWrapper from "../../components/WidgetWrapper";
@@ -34,6 +34,7 @@ const SearchPage = () => {
     <Box>
       <Navbar />
 
+      {search?._id ? 
       <>
         <WidgetWrapper>
           <Box
@@ -62,7 +63,13 @@ const SearchPage = () => {
             />
           </Box>
         </WidgetWrapper>
-      </>
+      </> :
+      <WidgetWrapper>
+        <Typography fontWeight="600" variant="h2" component="h3" sx={{ mb: "1.5rem" }}>
+          No user is found.
+        </Typography>
+      </WidgetWrapper>
+    }
     </Box>
   );
 };
